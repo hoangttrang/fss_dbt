@@ -1,0 +1,24 @@
+version: 2 
+
+sources: 
+  - name: citus_motive
+    database: citus
+    schema: public
+    tables: 
+      - name: employees
+      - name: data_inspections
+        loaded_at_field: date 
+        freshness: 
+          warn_after: {count: 1, period: day}
+          error_after: {count: 2, period: day}
+      - name: data_driving_periods
+        loaded_at_field: updated_at 
+        freshness: 
+          warn_after: {count: 1, period: day}
+          error_after: {count: 2, period: day}
+      - name: data_vehicle_group_mappings
+      - name: data_combined_events
+        loaded_at_field: updated_at 
+        freshness: 
+          warn_after: {count: 1, period: day}
+          error_after: {count: 2, period: day}

@@ -1,0 +1,14 @@
+version: 2
+
+# This is used to documentation on the database and the schema 
+models: 
+  - name: stg_motive_data_combined_events
+    data_tests:
+      - dbt_utils.unique_combination_of_columns: 
+          combination_of_columns:
+            - event_id 
+            - vehicle_id 
+            - driver_id 
+  - name: stg_motive_data_driving_periods
+  - name: stg_motive_data_inspections
+  - name: stg_motive_data_vehicle_group_mappings
