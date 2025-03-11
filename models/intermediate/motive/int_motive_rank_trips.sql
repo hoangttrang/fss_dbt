@@ -37,4 +37,4 @@ FROM  driving_period AS a
 JOIN vehicle_map_rs
     on a.vehicle_id = vehicle_map_rs.vehicle_id
 WHERE 1=1
-AND a.start_date BETWEEN  "{{var('mbr_start_date')}}" AND "{{ var('mbr_report_date')}}"
+AND a.start_date BETWEEN  '{{var("mbr_start_date")}}' AND '{{ var("mbr_report_date")}}'

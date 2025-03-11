@@ -3,7 +3,7 @@ WITH data_inspect AS (
 ) 
 
 SELECT 
-    , CAST(id AS INT) AS id
+    CAST(id AS INT) AS id
     , CAST(inspection_id AS INT) AS inspection_id
     , CAST(vehicle_id AS INT) AS vehicle_id
     , CAST(date AS DATE) AS date

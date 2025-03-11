@@ -5,6 +5,10 @@ WITH event_breakdown AS (
 , rank_trips AS (
     SELECT * FROM {{ ref('int_motive_rank_trips') }}
 )
+, all_monthly_events AS (
+    SELECT * FROM {{ ref('int_motive_all_monthly_events') }}
+)
+
 -- not account for drowsiness and forward collisions
 , monthly_events AS (
     SELECT
@@ -13,7 +17,7 @@ WITH event_breakdown AS (
         {%- for month in var('months_list') -%}
         , COUNT(DISTINCT CASE WHEN month = '{{ month }}' THEN event_id END) AS events_{{ month | lower }}
         {%- endfor %}
-    FROM {{ ref('int_motive_all_monthly_events') }} AS me
+    FROM all_monthly_events
     WHERE 1=1 AND coaching_status <> 'uncoachable'
     GROUP BY region, translated_site
 )
@@ -34,11 +38,11 @@ WITH event_breakdown AS (
 
 , ranked_events_per_vehicle AS (
     SELECT 
-        me.region AS "Region",
+        me.region AS "Region"
        , me.translated_site as "Location"
 	   , 'Events Per Vehicle' as "Metric"
     {%- for month in var('months_list') -%}
-       , COALESCE(CAST(events_{{ month | lower }} AS FLOAT) / NULLIF({{ month | lower }}_vehicles, 0), 0) AS "{{ month }}",
+       , COALESCE(CAST(events_{{ month | lower }} AS FLOAT) / NULLIF({{ month | lower }}_vehicles, 0), 0) AS "{{ month }}"
     {%- endfor %}
     FROM monthly_events me
     JOIN monthly_vehicles mv 
@@ -46,7 +50,7 @@ WITH event_breakdown AS (
 )
 
 SELECT *,
-    RANK() OVER (ORDER BY "January" ASC) AS "Company Rank",
-    RANK() OVER (PARTITION BY "Region" ORDER BY "January" ASC) AS "Region Rank"
+    RANK() OVER (ORDER BY "January" ASC) AS "Company Rank" 
+    , RANK() OVER (PARTITION BY "Region" ORDER BY "January" ASC) AS "Region Rank"
 FROM ranked_events_per_vehicle
 where "Location" is not null 

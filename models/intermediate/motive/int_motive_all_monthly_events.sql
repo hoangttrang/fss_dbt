@@ -14,8 +14,8 @@ SELECT
 
 FROM combined_events
 JOIN vehicle_map_rs
-    ON combined_events.vehicle_id = vehicle_map.vehicle_id
+    ON combined_events.vehicle_id = vehicle_map_rs.vehicle_id
 WHERE 1=1
     AND combined_events.type NOT IN ('drowsiness', 'forward_collision_warning')
-    AND combined_events.start_date BETWEEN "{{var('mbr_start_date')}}" AND "{{ var('mbr_report_date')}}"
+    AND combined_events.start_date BETWEEN '{{var("mbr_start_date")}}' AND '{{ var("mbr_report_date")}}'
     AND vehicle_map_rs.translated_site IS NOT NULL

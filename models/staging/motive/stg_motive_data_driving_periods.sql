@@ -30,10 +30,10 @@ SELECT
         WHEN lower(month) = 'november' THEN 11
         WHEN lower(month) = 'december' THEN 12
         ELSE NULL
-    END AS month_int,
+    END AS month_int
     , month
     , created_at   
     , updated_at 
     , unassigned
     , not_current 
-FROM data_driving_periods;
+FROM data_driving_periods
