@@ -5,11 +5,11 @@ WITH vehicle_map AS (
 )
 
 , site_translation AS (
-    SELECT * FROM {{ ref('int_site_translation') }}
+    SELECT * FROM {{ ref('site_translation') }}
 )
 
 , region_translation AS (
-    SELECT * FROM {{ ref('int_region_translation') }}
+    SELECT * FROM {{ ref('region_translation') }}
 )
 
 SELECT 

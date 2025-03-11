@@ -11,10 +11,15 @@ WITH monthly_events AS (
     SELECT * FROM {{ ref('int_motive_events_p_vehicles_ranked') }}
 )
 
+, rank_trips AS ( 
+    SELECT * FROM {{ ref('int_motive_rank_trips') }}
+)
+
 , ranked_events_moved_to_uncoachable AS (
     SELECT 
-        me.region as "Region"
-        , s.translated_site as "Location"
+        region as "Region"
+        , translated_site as "Location"
+        , 'Events Moved to Uncoachable' as "Metric"
         {%- for month in var('months_list') -%}
         , COUNT(DISTINCT CASE WHEN month = '{{ month }}' THEN event_id END) AS "{{ month }}"
         {%- endfor %}
@@ -50,9 +55,6 @@ WITH monthly_events AS (
         RANK() OVER (PARTITION BY "Region" ORDER BY "January" ASC) AS "Region Rank"
     FROM ranked_events_pending_review
 )
-, rank_trips AS ( 
-    SELECT * FROM {{ ref('int_motive_rank_trips') }}
-)
 
 , pct_unassigned_ranked AS (
     SELECT
@@ -60,8 +62,8 @@ WITH monthly_events AS (
         , translated_site AS "Location"
         , 'Unidentified Trips' AS "Metric"
         {%- for month in var('months_list') -%}
-        , COALESCE(CAST(COUNT(DISTINCT CASE WHEN unassigned = true AND month = "{{ month }}" THEN event_id END) AS FLOAT) 
-        / NULLIF(COUNT(DISTINCT CASE WHEN month = "{{ month }}" THEN event_id END), 0), 0) AS "{{ month }}"
+        , COALESCE(CAST(COUNT(DISTINCT CASE WHEN unassigned = true AND month = '{{ month }}' THEN event_id END) AS FLOAT) 
+        / NULLIF(COUNT(DISTINCT CASE WHEN month = '{{ month }}' THEN event_id END), 0), 0) AS "{{ month }}"
         {%- endfor %}
     FROM rank_trips
     WHERE 1=1

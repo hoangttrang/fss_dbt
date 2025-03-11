@@ -1,3 +1,18 @@
+-- depends_on: {{ ref('main_safety_score_config') }}
+{%- call statement('safety_score', fetch_result=True) %}
+    SELECT motive_event_name, value 
+    FROM {{ ref('main_safety_score_config') }}
+    WHERE sub_event2 IS NOT NULL AND value IS NOT NULL
+{%- endcall -%}
+
+-- get safety score from main_safety_score_config table
+{%- set safety_score_results = load_result('safety_score')['data'] %}
+{%- set safety_score_map = {} %}
+-- create a dictionary of safety scores and corresponding event types
+{%- for row in safety_score_results %}
+    {%- set _ = safety_score_map.update({ row[0]: row[1] }) %}
+{%- endfor %}
+
 WITH vehicle_map_rs AS (
     SELECT * FROM {{ ref('int_motive_vehicle_group_map_rs') }}
 )
@@ -11,20 +26,18 @@ WITH vehicle_map_rs AS (
 )
 
 , safety_score_weights AS (
-    SELECT 
+    SELECT DISTINCT
     vehicle_map_rs.region
     , vehicle_map_rs.translated_site
     {%- for month in var('months_list') %} 
         {%- for event_type in var('motive_event_type') %}
-            {%- if event_type == 'drowsiness' or event_type == 'forward_collision_warning' %}
-            , 0 AS {{month | lower}}_points_{{event_type}}
-            {%- else %}
-            , 1 AS {{month | lower}}_points_{{event_type}}
-            {%- endif %}
+            {%- set score_value = safety_score_map.get(event_type, 1) %}
+            , {{ score_value }} AS {{ month | lower }}_points_{{ event_type }}
         {%- endfor %}
     {%- endfor %}
-FROM vehicle_map_rs
-WHERE translated_site IS NOT NULL) 
+    FROM vehicle_map_rs
+    WHERE translated_site IS NOT NULL
+)
 
 , combined_dd_and_eb AS ( 
     SELECT 
@@ -69,12 +82,13 @@ WHERE translated_site IS NOT NULL)
     {%- for month in var('months_list') %}
         , 100 - COALESCE(ssb.{{month | lower}}_total_points_for_score / NULLIF(ssb.{{month | lower}}_miles_driven, 0), 0) * 1000 AS "{{month}}"
     {%- endfor %}
-FROM safety_score_breakdown ssb
+    FROM safety_score_breakdown ssb
+    WHERE ssb.region IS NOT NULL
 )
 
 SELECT *,
     RANK() OVER (ORDER BY "January" DESC) AS "Company Rank",
     RANK() OVER (PARTITION BY "Region" ORDER BY "January" DESC) AS "Region Rank"
 FROM safety_scores_unranked
-
+ 
 
