@@ -28,7 +28,7 @@ vars:
   mbr_start_date: '2025-01-01'
   mbr_report_date: '2025-02-01'
   months_list: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-  motive_event_type: ["camera_obstruction", "cell_phone", "crash", "distraction", "driver_facing_cam_obstruction", "drowsiness", "forward_collision_warning", "manual_event", "near_miss", "ran_a_red_light", "road_facing_cam_obstruction", "seat_belt_violation", "speeding", "stop_sign_violation", "tailgating", "unsafe_lane_change"]
+  motive_event_type: ["unsafe_parking","camera_obstruction", "cell_phone", "crash", "distraction", "driver_facing_cam_obstruction", "drowsiness", "forward_collision_warning", "manual_event", "near_miss", "ran_a_red_light", "road_facing_cam_obstruction", "seat_belt_violation", "speeding", "stop_sign_violation", "tailgating", "unsafe_lane_change"]
 
 
 # Configuring models
@@ -41,8 +41,6 @@ models:
   fss_dbt:
     staging:
       +materialized: view
-    int_utilities:
-      +materialized: view 
     intermediate:
       +materialized: view
     analytics:

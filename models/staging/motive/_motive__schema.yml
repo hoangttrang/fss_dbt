@@ -12,3 +12,4 @@ models:
   - name: stg_motive_data_driving_periods
   - name: stg_motive_data_inspections
   - name: stg_motive_data_vehicle_group_mappings
+  - name: stg_motive_safety_scores
