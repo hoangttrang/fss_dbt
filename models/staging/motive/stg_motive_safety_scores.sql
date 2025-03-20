@@ -1,7 +1,5 @@
 WITH safety_score_weights AS (
     SELECT * FROM {{ source ('citus_motive', 'safety_score_weights') }}
-
-    SELECT * FROM  {{ source ('citus_motive', 'data_vehicle_group_mappings')}}
 )
 
 SELECT 
