@@ -26,17 +26,8 @@ WITH vehicle_map_rs AS (
 )
 
 , safety_score_weights AS (
-    SELECT DISTINCT
-    vehicle_map_rs.region
-    , vehicle_map_rs.translated_site
-    {%- for month in var('months_list') %} 
-        {%- for event_type in var('motive_event_type') %}
-            {%- set score_value = safety_score_map.get(event_type, 1) %}
-            , {{ score_value }} AS {{ month | lower }}_points_{{ event_type }}
-        {%- endfor %}
-    {%- endfor %}
-    FROM vehicle_map_rs
-    WHERE translated_site IS NOT NULL
+    SELECT DISTINCT *
+    FROM {{ref('int_safety_score_weights_month')}}
 )
 
 , combined_dd_and_eb AS ( 
