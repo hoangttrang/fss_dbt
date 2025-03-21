@@ -1,3 +1,5 @@
+{% set month_str = get_current_month_str() %}
+
 WITH event_breakdown AS (
     SELECT * FROM {{ ref('int_motive_event_breakdown') }}
 )
@@ -50,7 +52,7 @@ WITH event_breakdown AS (
 )
 
 SELECT *,
-    RANK() OVER (ORDER BY "February" ASC) AS "Company Rank" 
-    , RANK() OVER (PARTITION BY "Region" ORDER BY "February" ASC) AS "Region Rank"
+    RANK() OVER (ORDER BY "{{month_str}}" ASC) AS "Company Rank" 
+    , RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" ASC) AS "Region Rank"
 FROM ranked_events_per_vehicle
 where "Location" is not null 

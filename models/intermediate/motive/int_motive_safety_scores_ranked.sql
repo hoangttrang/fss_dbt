@@ -13,6 +13,8 @@
     {%- set _ = safety_score_map.update({ row[0]: row[1] }) %}
 {%- endfor %}
 
+{% set month_str = get_current_month_str() %}
+
 WITH vehicle_map_rs AS (
     SELECT * FROM {{ ref('int_motive_vehicle_group_map_rs') }}
 )
@@ -78,8 +80,8 @@ WITH vehicle_map_rs AS (
 )
 
 SELECT *,
-    RANK() OVER (ORDER BY "February" DESC) AS "Company Rank",
-    RANK() OVER (PARTITION BY "Region" ORDER BY "February" DESC) AS "Region Rank"
+    RANK() OVER (ORDER BY "{{month_str}}" DESC) AS "Company Rank",
+    RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" DESC) AS "Region Rank"
 FROM safety_scores_unranked
  
 
