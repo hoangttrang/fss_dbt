@@ -50,7 +50,7 @@ WITH event_breakdown AS (
 )
 
 SELECT *,
-    RANK() OVER (ORDER BY "January" ASC) AS "Company Rank" 
-    , RANK() OVER (PARTITION BY "Region" ORDER BY "January" ASC) AS "Region Rank"
+    RANK() OVER (ORDER BY "February" ASC) AS "Company Rank" 
+    , RANK() OVER (PARTITION BY "Region" ORDER BY "February" ASC) AS "Region Rank"
 FROM ranked_events_per_vehicle
 where "Location" is not null 

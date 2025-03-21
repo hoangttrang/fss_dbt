@@ -1,4 +1,5 @@
 
+
 WITH monthly_events AS (
     SELECT * FROM {{ ref('int_motive_all_monthly_events') }}
 )
@@ -31,8 +32,8 @@ WITH monthly_events AS (
 , final_events_moved_to_uncoachable AS 
 (
     SELECT *,
-        RANK() OVER (ORDER BY "February" ASC) AS "Company Rank",
-        RANK() OVER (PARTITION BY "Region" ORDER BY "February" ASC) AS "Region Rank"
+        RANK() OVER (ORDER BY "December" ASC) AS "Company Rank",
+        RANK() OVER (PARTITION BY "Region" ORDER BY "December" ASC) AS "Region Rank"
     FROM ranked_events_moved_to_uncoachable
 )
 
@@ -51,8 +52,8 @@ WITH monthly_events AS (
 
 , final_events_pending_review AS (
     SELECT *,
-        RANK() OVER (ORDER BY "February" ASC) AS "Company Rank",
-        RANK() OVER (PARTITION BY "Region" ORDER BY "February" ASC) AS "Region Rank"
+        RANK() OVER (ORDER BY "December" ASC) AS "Company Rank",
+        RANK() OVER (PARTITION BY "Region" ORDER BY "December" ASC) AS "Region Rank"
     FROM ranked_events_pending_review
 )
 
@@ -73,8 +74,8 @@ WITH monthly_events AS (
 
 , pct_unassigned_final AS (
     SELECT *,
-        RANK() OVER (ORDER BY "February" ASC) AS "Company Rank",
-        RANK() OVER (PARTITION BY "Region" ORDER BY "February" ASC) AS "Region Rank"
+        RANK() OVER (ORDER BY "December" ASC) AS "Company Rank",
+        RANK() OVER (PARTITION BY "Region" ORDER BY "December" ASC) AS "Region Rank"
     FROM pct_unassigned_ranked
     where "Location" is not null
 )

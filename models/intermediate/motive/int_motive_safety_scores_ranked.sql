@@ -78,8 +78,8 @@ WITH vehicle_map_rs AS (
 )
 
 SELECT *,
-    RANK() OVER (ORDER BY "January" DESC) AS "Company Rank",
-    RANK() OVER (PARTITION BY "Region" ORDER BY "January" DESC) AS "Region Rank"
+    RANK() OVER (ORDER BY "February" DESC) AS "Company Rank",
+    RANK() OVER (PARTITION BY "Region" ORDER BY "February" DESC) AS "Region Rank"
 FROM safety_scores_unranked
  
 
