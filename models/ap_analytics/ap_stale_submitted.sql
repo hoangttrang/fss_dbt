@@ -14,6 +14,7 @@ SELECT
     , record_url
     , posted_date
     , due_date
+    , invoice_date
     , sage_submitted_date
     , total_due
     , CURRENT_DATE - sage_submitted_date::date AS stale_submitted_age
