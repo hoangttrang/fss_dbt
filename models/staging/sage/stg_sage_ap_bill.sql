@@ -44,9 +44,9 @@ SELECT
     , docsource AS doc_source
     , recordtype AS record_type
     , systemgenerated AS system_generated
-    , auwhencreated AS au_when_created
+    , auwhencreated AS sage_submitted_date
     , due_in_days
-    , record_url AS invoice_url
+    , record_url 
     , retainagepercentage AS retainage_percentage
     , retainagereleased AS retainage_released
     , onhold AS on_hold

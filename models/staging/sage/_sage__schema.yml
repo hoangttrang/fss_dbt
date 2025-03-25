@@ -10,4 +10,9 @@ models:
             - recordid 
             - vendorid  
 
+  - name: stg_sage_ap_bill_item
+    columns: 
+      - name: state
+        description: State of the invoice. V= voided- refund , S = submitted, U = unapproved, usually associated with Declined status, D= Deleted, A = Approved 
+
   
