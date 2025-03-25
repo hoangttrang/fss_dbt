@@ -12,7 +12,7 @@ SELECT
     bill.record_num
     , bill.invoice_num
     , COALESCE(bill.vendor_id::text, '') || ' - ' || COALESCE(bill.vendor_name, '') AS vendor_name_full
-    , vendor_name 
+    , bill.vendor_name 
     , bill.invoice_date
     , bill.posted_date
     , bill.modified_date
