@@ -17,6 +17,7 @@ SELECT
     , bill.posted_date
     , bill.modified_date
     , bill.due_date
+    , bill.paid_date
     , bill.state 
     , bill.total_paid AS inv_total_paid
     , bill.total_due AS inv_total_due
