@@ -23,10 +23,11 @@ SELECT
     , invoice_date
     , due_date
     , modified_date
-    , total_due
+    , inv_total_due
+    , total_line_due
     , sage_submitted_date
 FROM ap_full_invoice
-WHERE total_due > 0 
+WHERE inv_total_due > 0 
    AND due_date <= CURRENT_DATE 
    AND state != 'Declined'
 ORDER BY
@@ -37,4 +38,4 @@ ORDER BY
         WHEN CURRENT_DATE - due_date <= 20 THEN 4
         ELSE 5
     END DESC,
-    total_due DESC
+    inv_total_due DESC
