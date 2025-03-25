@@ -7,12 +7,19 @@ models:
     data_tests:
       - dbt_utils.unique_combination_of_columns: 
           combination_of_columns:
-            - recordid 
-            - vendorid  
+            - invoice_num 
+            - vendor_id
+            - record_num  
 
   - name: stg_sage_ap_bill_item
     columns: 
       - name: state
         description: State of the invoice. V= voided- refund , S = submitted, U = unapproved, usually associated with Declined status, D= Deleted, A = Approved 
-
+    data_tests: 
+      - dbt_utils.unique_combination_of_columns: 
+          combination_of_columns:
+            - record_num
+            - invoice_num 
+            - vendor_id 
+            - line_no
   
