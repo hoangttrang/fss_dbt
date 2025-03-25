@@ -28,6 +28,7 @@ SELECT
 FROM ap_full_invoice
 WHERE total_due > 0 
    AND due_date <= CURRENT_DATE 
+   AND state != 'Declined'
 ORDER BY
     CASE
         WHEN CURRENT_DATE - due_date <= 5 THEN 1
