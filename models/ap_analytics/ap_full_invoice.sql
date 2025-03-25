@@ -45,7 +45,7 @@ SELECT
     , bill.total_due
     , bill.sage_submitted_date
     , COALESCE(bill_item.account_no::text, '') || ' - ' || COALESCE(bill_item.account_title, '') AS account_name_full
-    , account_name
+    , account_title AS account_name
     , COALESCE(bill_item.class_id::text, '') || ' - ' || COALESCE(bill_item.class_name, '') AS class_name_full
     , COALESCE(bill_item.department_id::text, '') || ' - ' || COALESCE(bill_item.department_name, '') AS department_name_full
     , department_name
