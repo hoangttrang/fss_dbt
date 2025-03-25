@@ -35,6 +35,7 @@ SELECT
     bill.record_num
     , bill.invoice_num
     , COALESCE(bill.vendor_id::text, '') || ' - ' || COALESCE(bill.vendor_name, '') AS vendor_name_full
+    , vendor_name 
     , bill.invoice_date
     , bill.posted_date
     , bill.modified_date
@@ -44,8 +45,10 @@ SELECT
     , bill.total_due
     , bill.sage_submitted_date
     , COALESCE(bill_item.account_no::text, '') || ' - ' || COALESCE(bill_item.account_title, '') AS account_name_full
+    , account_name
     , COALESCE(bill_item.class_id::text, '') || ' - ' || COALESCE(bill_item.class_name, '') AS class_name_full
     , COALESCE(bill_item.department_id::text, '') || ' - ' || COALESCE(bill_item.department_name, '') AS department_name_full
+    , department_name
     , bill_item.line_item_states
     , bill_item.total_line_items
     , bill.record_url

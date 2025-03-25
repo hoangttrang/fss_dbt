@@ -4,8 +4,11 @@ WITH ap_full_invoice AS (
 
 SELECT 
     vendor_name_full
+    , vendor_name
     , department_name_full
+    , department_name
     , account_name_full
+    , account_name
     , class_name_full
     , CASE
         WHEN CURRENT_DATE - due_date <= 5 THEN '0-5'
