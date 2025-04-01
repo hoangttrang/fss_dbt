@@ -1,0 +1,12 @@
+version: 2
+
+# This is used to documentation on the database and the schema 
+models: 
+  - name: stg_motive_data_combined_events
+    description: this model show invoice with all states except "stale"; this record is captured per invoice_number, vendor and line items
+    data_tests:
+      - dbt_utils.unique_combination_of_columns: 
+          combination_of_columns:
+            - invoice_num
+            - vendor_name_full
+            - line_no
