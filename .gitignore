@@ -2,3 +2,4 @@
 target/
 dbt_packages/
 logs/
+fss_dbt\package-lock.yml
