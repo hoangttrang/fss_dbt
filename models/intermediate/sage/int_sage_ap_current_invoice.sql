@@ -17,6 +17,7 @@ record_num
 , sage_rec_payment_date
 , term_name
 , due_date
+, paid_date
 , state 
 , total_paid 
 , total_due 
