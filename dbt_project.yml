@@ -27,7 +27,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 vars: 
   current_year: '2025'
   mbr_start_date: '2025-01-01'
-  mbr_report_date: '2025-02-28'
+  mbr_report_date: '2025-03-31'
   months_list: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
   motive_event_type: ["unsafe_parking","camera_obstruction", "cell_phone", "crash", "distraction", "driver_facing_cam_obstruction", "drowsiness", "forward_collision_warning", "manual_event", "near_miss", "ran_a_red_light", "road_facing_cam_obstruction", "seat_belt_violation", "speeding", "stop_sign_violation", "tailgating", "unsafe_lane_change"]
 
