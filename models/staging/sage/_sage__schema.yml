@@ -12,6 +12,7 @@ models:
             - record_num  
 
   - name: stg_sage_ap_bill_item
+    description: This table stores invoice line items per vendor with the most up-to-date information. It tracks if an invoice is deleted. doesn't track invoice status changes
     columns: 
       - name: state
         description: State of the invoice. V= voided- refund , S = submitted, U = unapproved, usually associated with Declined status, D= Deleted, A = Approved 
