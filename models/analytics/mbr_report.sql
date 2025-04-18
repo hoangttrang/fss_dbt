@@ -128,7 +128,7 @@ WITH monthly_events AS (
         , translated_site AS "Location"
         , 'Unidentified Trips' AS "Metric"
         {%- for month in var('months_list') -%}
-        , COALESCE(CAST(COUNT(DISTINCT CASE WHEN unassigned = true AND month = '{{ month }}' THEN event_id END) AS FLOAT) 
+        , COALESCE(CAST(COUNT(DISTINCT CASE WHEN driver_id IS NULL AND month = '{{ month }}' THEN event_id END) AS FLOAT) 
         / NULLIF(COUNT(DISTINCT CASE WHEN month = '{{ month }}' THEN event_id END), 0), 0) AS "{{ month }}"
         {%- endfor %}
     FROM rank_trips
