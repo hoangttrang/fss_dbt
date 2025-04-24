@@ -19,17 +19,64 @@ WITH vehicle_map_rs AS (
     SELECT * FROM {{ ref('int_motive_vehicle_group_map_rs') }}
 )
 
-, drive_distances AS (
-    SELECT * FROM {{ ref('int_motive_drive_distances') }}
-)
-
 , event_breakdown AS (
     SELECT * FROM {{ ref('int_motive_event_breakdown') }}
 )
 
+
+{% set safety_score_event = dbt_utils.star(
+    from=ref('int_safety_score_weights_year'),
+    except=["year", "id", "month"])
+%}
+{# Remove double quotes, then split on commas #}
+{%- set columns_str = safety_score_event | replace('"', '') %}
+{%- set safety_event_list = [] %}
+
+{#Convert safety score columns into a list#}
+{%- for col in columns_str.split(',') -%}
+    {%- set _ = safety_event_list.append(col.strip()) -%}
+{%- endfor -%}
+
+
+, safety_score_weights_by_mnth AS (SELECT 
+    region 
+    , translated_site
+    {%- for month in var('months_list') %}
+        {%set month_str =  month[:3]%}
+        {%- for event_type in safety_event_list %}
+            {%- set score_value = get_safety_score(month_str,event_type) %}
+            , {{ score_value[0] }}  AS {{ month | lower }}_{{ event_type }}
+        {%- endfor %}
+    {%- endfor %}
+FROM vehicle_map_rs
+WHERE translated_site IS NOT NULL
+)
+
 , safety_score_weights AS (
     SELECT DISTINCT *
-    FROM {{ref('int_safety_score_weights_month')}}
+    FROM safety_score_weights_by_mnth
+)
+
+, rank_trips AS (
+    SELECT * FROM {{ ref('int_motive_rank_trips') }}
+)
+
+, drive_distances AS (SELECT 
+    vehicle_map_rs.region
+    , vehicle_map_rs.translated_site
+    {% for month in var('months_list') %}
+    , SUM(CASE WHEN LOWER(rank_trips.month) = LOWER('{{month}}') THEN rank_trips.driving_distance ELSE 0 END) AS {{month | lower}}_miles_driven
+    {% endfor %}
+FROM rank_trips 
+JOIN vehicle_map_rs
+    ON rank_trips.vehicle_id = vehicle_map_rs.vehicle_id
+WHERE rank_trips.start_date BETWEEN '{{var("mbr_start_date")}}' AND '{{ var("mbr_report_date")}}'
+    AND rank_trips.driving_distance > 0
+    AND rank_trips.driving_distance <= 500
+    AND rank_trips.row_num = 1
+GROUP BY 
+    vehicle_map_rs.region
+    , vehicle_map_rs.translated_site
 )
 
 , combined_dd_and_eb AS ( 
