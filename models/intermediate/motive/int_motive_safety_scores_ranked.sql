@@ -70,7 +70,7 @@ WITH vehicle_map_rs AS (
     SELECT 
     ssb.region as "Region"
     , ssb.translated_site as "Location"
-    , 'Safety Score' as "Metric"
+    , 'Site Safety Score' as "Metric"
     -- Calculate the safety score for each month over 100:
     {%- for month in var('months_list') %}
         , 100 - COALESCE(ssb.{{month | lower}}_total_points_for_score / NULLIF(ssb.{{month | lower}}_miles_driven, 0), 0) * 1000 AS "{{month}}"

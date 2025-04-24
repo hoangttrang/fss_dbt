@@ -21,6 +21,10 @@ WITH monthly_events AS (
     SELECT * FROM {{ ref('int_motive_rank_trips') }}
 )
 
+, dvir_rank AS ( 
+    SELECT * FROM {{ ref('int_motive_dvir_rank') }}
+)
+
 , ranked_events_moved_to_uncoachable AS (
     SELECT 
         region as "Region"
@@ -117,7 +121,7 @@ WITH monthly_events AS (
         DISTINCT
         vm.region AS "Region",
         vm.translated_site AS "Location",
-        'Unidentified Trips' AS "Metric"
+        'Percent Unassigned Trips' AS "Metric"
     FROM vehicle_map_rs vm
     WHERE translated_site is NOT NULL
 )
@@ -126,7 +130,7 @@ WITH monthly_events AS (
     SELECT
         region AS "Region"
         , translated_site AS "Location"
-        , 'Unidentified Trips' AS "Metric"
+        , 'Percent Unassigned Trips' AS "Metric"
         {%- for month in var('months_list') -%}
         , COALESCE(CAST(COUNT(DISTINCT CASE WHEN driver_id IS NULL AND month = '{{ month }}' THEN event_id END) AS FLOAT) 
         / NULLIF(COUNT(DISTINCT CASE WHEN month = '{{ month }}' THEN event_id END), 0), 0) AS "{{ month }}"
@@ -159,6 +163,8 @@ WITH monthly_events AS (
     where "Location" is not null
 )
 
+
+
 SELECT * 
 FROM final_events_per_vehicle
 UNION ALL
@@ -173,5 +179,6 @@ FROM pct_unassigned_final_rank
 UNION ALL
 SELECT * 
 FROM safety_scores_ranked
- 
+UNION ALL 
+SELECT * FROM dvir_rank
 

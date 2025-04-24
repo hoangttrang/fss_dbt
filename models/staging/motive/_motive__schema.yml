@@ -13,3 +13,5 @@ models:
   - name: stg_motive_data_inspections
   - name: stg_motive_data_vehicle_group_mappings
   - name: stg_motive_safety_scores
+  - name: stg_motive_consolidated_sites
+  
