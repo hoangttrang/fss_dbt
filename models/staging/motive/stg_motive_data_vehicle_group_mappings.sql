@@ -10,5 +10,5 @@ SELECT
     , make
     , model
     , group_id
-    , group_name
+    , TRIM(group_name) AS group_name
 FROM data_vehicle_group_mappings

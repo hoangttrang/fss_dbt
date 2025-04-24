@@ -23,3 +23,4 @@ sources:
           warn_after: {count: 1, period: day}
           error_after: {count: 2, period: day}
       - name: safety_score_weights
+      - name: consolidated_sites
