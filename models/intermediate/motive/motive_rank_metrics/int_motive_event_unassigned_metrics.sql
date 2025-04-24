@@ -54,10 +54,7 @@ WITH monthly_events AS (
 )
 
 
-SELECT *,
-    RANK() OVER (ORDER BY "{{month_str}}" ASC) AS "Company Rank",
-    RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" ASC) AS "Region Rank"
+SELECT *
 FROM pct_unassigned_final
-where "Location" is not null
 
 

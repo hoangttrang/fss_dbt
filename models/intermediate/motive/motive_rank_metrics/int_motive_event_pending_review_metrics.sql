@@ -47,8 +47,6 @@ WITH monthly_events AS (
         AND bg."Metric" = dc."Metric"
 )
 
-SELECT *,
-    RANK() OVER (ORDER BY "{{month_str}}" ASC) AS "Company Rank",
-    RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" ASC) AS "Region Rank"
+SELECT * 
 FROM final_events_pending_review
 

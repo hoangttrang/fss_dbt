@@ -1,6 +1,5 @@
-{% set month_str = get_current_month_str() %}
 
-with vehicle_map_rs AS (
+WITH vehicle_map_rs AS (
     SELECT * FROM {{ ref('int_motive_vehicle_group_map_rs') }}
 ) 
 
@@ -100,11 +99,7 @@ ORDER BY translated_site
         AND bg."Metric" = dc."Metric"
 )
 
-SELECT *,
-    RANK() OVER (PARTITION BY "Metric" ORDER BY "{{ month_str }}" DESC) AS "Company Rank",
-    RANK() OVER (PARTITION BY "Metric", "Region" ORDER BY "{{ month_str }}" DESC) AS "Region Rank"
+SELECT *
 FROM dvir_all_sites
-WHERE "Location" IS NOT NULL
-ORDER BY "Metric", "Region", "Location"
 
 

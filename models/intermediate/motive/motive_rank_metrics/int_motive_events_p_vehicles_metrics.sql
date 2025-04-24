@@ -51,8 +51,5 @@ WITH event_breakdown AS (
     ON me.region = mv.region AND me.translated_site = mv.translated_site
 )
 
-SELECT *,
-    RANK() OVER (ORDER BY "{{month_str}}" ASC) AS "Company Rank" 
-    , RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" ASC) AS "Region Rank"
+SELECT *
 FROM ranked_events_per_vehicle
-where "Location" is not null 

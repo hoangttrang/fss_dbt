@@ -126,9 +126,7 @@ GROUP BY
     WHERE ssb.region IS NOT NULL
 )
 
-SELECT *,
-    RANK() OVER (ORDER BY "{{month_str}}" DESC) AS "Company Rank",
-    RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" DESC) AS "Region Rank"
+SELECT *
 FROM safety_scores_unranked
  
 
