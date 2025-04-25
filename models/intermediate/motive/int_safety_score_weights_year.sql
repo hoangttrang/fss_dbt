@@ -33,6 +33,8 @@
     {%- endif -%}
 {%- endfor -%}
 
+{% set reporting_year = get_reporting_year() %} 
+
 WITH safety_score_weights AS (
   SELECT * 
   FROM {{ ref('stg_motive_safety_scores')}}
@@ -44,4 +46,4 @@ SELECT
     , 0 AS points_{{missing_event}} 
     {%- endfor %}
 FROM safety_score_weights
-WHERE year = {{var('current_year')}}
+WHERE year = {{ reporting_year}}
