@@ -114,4 +114,6 @@ SELECT
     {%- for month in var('months_list') %}
         , ROUND("{{month}}"::NUMERIC, 2) AS "{{month}}"
     {%- endfor %}
+    , "Company Rank"
+    , "Region Rank"
 FROM unioned_table
