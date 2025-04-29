@@ -89,7 +89,7 @@ WITH safety_scores_metrics AS (
 
 
 
-SELECT * 
+, unioned_table AS (SELECT * 
 FROM final_events_per_vehicle_rank
 UNION ALL
 SELECT * 
@@ -105,4 +105,13 @@ SELECT *
 FROM safety_scores_ranked
 UNION ALL 
 SELECT * FROM dvir_rank
+) 
 
+SELECT 
+    "Region"
+    , "Location"
+    , "Metric"
+    {%- for month in var('months_list') %}
+        , ROUND("{{month}}"::NUMERIC, 2) AS "{{month}}"
+    {%- endfor %}
+FROM unioned_table
