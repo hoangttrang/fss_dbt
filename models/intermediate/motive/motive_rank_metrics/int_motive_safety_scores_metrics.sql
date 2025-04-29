@@ -15,6 +15,13 @@
 
 {% set month_str = get_current_month_str() %}
 
+-- Get sliced months from Jan to current months: 
+
+{%- set current_month = get_current_month_str() %}
+{%- set month_index = var('months_list').index(current_month) %}
+{%- set valid_months = var('months_list')[:month_index + 1] %}
+{%- set remaining_months = var('months_list')[month_index + 1:] %} 
+
 WITH vehicle_map_rs AS (
     SELECT * FROM {{ ref('int_motive_vehicle_group_map_rs') }}
 )
@@ -119,9 +126,17 @@ GROUP BY
     , ssb.translated_site as "Location"
     , 'Site Safety Score' as "Metric"
     -- Calculate the safety score for each month over 100:
-    {%- for month in var('months_list') %}
+    {%- for month in valid_months %}
         , 100 - COALESCE(ssb.{{month | lower}}_total_points_for_score / NULLIF(ssb.{{month | lower}}_miles_driven, 0), 0) * 1000 AS "{{month}}"
     {%- endfor %}
+
+    -- Only if remaining_months is not empty, add 0 as placeholder
+    {%- if remaining_months | length > 0 %}
+        {%- for month in remaining_months %}
+            , 0 AS "{{month}}"
+        {%- endfor %}
+    {%- endif %}
+
     FROM safety_score_breakdown ssb
     WHERE ssb.region IS NOT NULL
 )
