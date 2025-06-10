@@ -1,7 +1,7 @@
 version: 2 
 
 sources: 
-  - name: sage_ap
+  - name: sage
     database: citus
     schema: sage_intacct
     tables: 

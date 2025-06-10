@@ -1,5 +1,5 @@
 WITH ap_bill AS (
-    SELECT * FROM  {{ source ('sage_ap', 'ap_bill') }}
+    SELECT * FROM  {{ source ('sage', 'ap_bill') }}
 )
 
 SELECT 
