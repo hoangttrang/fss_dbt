@@ -7,48 +7,48 @@ WITH vehicle_map_rs AS (
     SELECT * FROM {{ ref('stg_motive_data_inspections') }}
 )
 
-, driving_periods as (
-	select b.group_name
+, driving_periods AS (
+	SELECT b.group_name
 	  ,b.translated_site
 	  ,a.vehicle_id
-	  ,cast(start_date as date) as date
-	  ,COUNT(DISTINCT event_id) as trips
-	from public.data_driving_periods a
-	join vehicle_map_rs b
-	on a.vehicle_id = b.vehicle_id
-	where 1=1
-	--and driving_distance > 0.5
-	and start_date BETWEEN '{{var("mbr_start_date")}}' AND '{{ var("mbr_report_date")}}'
-	group by b.group_name, b.translated_site, a.vehicle_id, cast(start_date as date)
+	  ,cast(start_date AS date) AS date
+	  ,COUNT(DISTINCT event_id) AS trips
+	FROM public.data_driving_periods a
+	JOIN vehicle_map_rs b
+	ON a.vehicle_id = b.vehicle_id
+	WHERE 1=1
+	--AND driving_distance > 0.5
+	AND start_date BETWEEN '{{var("mbr_start_date")}}' AND '{{ var("mbr_report_date")}}'
+	GROUP BY b.group_name, b.translated_site, a.vehicle_id, cast(start_date AS date)
 )
 
-, inspections as (
-	select 
+, inspections AS (
+	SELECT 
 		  b.translated_site
 		  ,b.group_name
 		  ,date
-		  ,COUNT(DISTINCT inspection_id) as inspections
-	from data_inspections a
-	join vehicle_map_rs b
-	on a.vehicle_id = b.vehicle_id
-	where 1=1
-	and date  BETWEEN '{{var("mbr_start_date")}}' AND '{{ var("mbr_report_date")}}'
-	group by b.translated_site, b.group_name, a.vehicle_id, date
-),
+		  ,COUNT(DISTINCT inspection_id) AS inspections
+	FROM data_inspections a
+	JOIN vehicle_map_rs b
+	ON a.vehicle_id = b.vehicle_id
+	WHERE 1=1
+	AND date  BETWEEN '{{var("mbr_start_date")}}' AND '{{ var("mbr_report_date")}}'
+	GROUP BY b.translated_site, b.group_name, a.vehicle_id, date
+)
 
-for_aggregation as (
-select 
-	   dp.group_name
-      ,dp.translated_site
-	  ,dp.vehicle_id
-	  ,dp.date
-	  ,dp.trips
-	  ,insp.inspections
-	  ,case when dp.trips >= 1 and insp.inspections >= 1 then 1 else 0 end as dvir_completed
-	  --,case when dp.trips = insp.inspections then 1 else 0 end as dvir_completed
-from driving_periods dp
-left join inspections insp
-	on (TRIM(BOTH FROM dp.group_name) = TRIM(BOTH FROM insp.group_name)) and dp.date = insp.date
+, for_aggregation AS (
+	SELECT 
+		dp.group_name
+		,dp.translated_site
+		,dp.vehicle_id
+		,dp.date
+		,dp.trips
+		,insp.inspections
+		,CASE WHEN dp.trips >= 1 AND insp.inspections >= 1 THEN 1 ELSE 0 END AS dvir_completed
+		--,case when dp.trips = insp.inspections then 1 else 0 end AS dvir_completed
+	FROM driving_periods dp
+	LEFT JOIN inspections insp
+		ON (TRIM(BOTH FROM dp.group_name) = TRIM(BOTH FROM insp.group_name)) AND dp.date = insp.date
 )
 
 
@@ -68,9 +68,9 @@ left join inspections insp
 	{%- for month in var('months_list') -%}
     , AVG(CASE WHEN mnth = '{{ month }}' THEN dvir_completion END) AS "{{ month }}"
     {%- endfor %}
-FROM dvir_completion_cal
-GROUP BY translated_site
-ORDER BY translated_site
+	FROM dvir_completion_cal
+	GROUP BY translated_site
+	ORDER BY translated_site
 ) 
 
 , base_grid AS (
