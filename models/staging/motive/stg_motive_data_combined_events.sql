@@ -22,3 +22,4 @@ SELECT
     , max_over_speed_in_mph 
     , not_current 
 FROM data_combined_events
+WHERE not_current IS FALSE OR not_current IS NULL

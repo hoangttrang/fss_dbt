@@ -12,23 +12,18 @@
 {%- set matched_event = [] -%}
 {%- for motive_event in sorted_motive_events -%}
     {%- for safety_event in sorted_safety_events -%}
-        {%- set safety_event_str = safety_event|string 
-            | replace("(", "") 
-            | replace(")", "") 
-            | replace(",", "") 
-            | replace("'", "") 
-        -%}
-        {%- if motive_event in safety_event_str -%}
+        {%- set safety_event_str = safety_event[0].replace('points_', '')-%}
+        {%- if motive_event == safety_event_str -%}
+            {# Append the motive event to the matched_event list #}
             {%- set _ignore = matched_event.append(motive_event) -%}
         {%- endif -%}
     {%- endfor -%}
 {%- endfor -%}
-{%- set distinct_events = matched_event | unique -%}
 
 {# Build a list of motive events NOT in the distinct events #}
 {%- set missing_from_events = [] -%}
 {%- for item in sorted_motive_events -%}
-    {%- if item not in distinct_events -%}
+    {%- if item not in matched_event -%}
         {%- set _ignore = missing_from_events.append(item) -%}
     {%- endif -%}
 {%- endfor -%}
