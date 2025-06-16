@@ -4,6 +4,7 @@ WITH combined_events AS (
 
 , vehicle_map_rs AS (
     SELECT * FROM {{ ref('int_motive_vehicle_group_map_rs') }}
+    WHERE translated_site IS NOT NULL
 )
 
 SELECT 
@@ -18,7 +19,7 @@ SELECT
           CASE 
             WHEN LOWER(combined_events.month) = LOWER('{{ month }}')
                  AND combined_events.type = '{{ event_type }}'
-                 AND combined_events.max_over_speed_in_mph BETWEEN 0 AND 5
+                 AND combined_events.max_over_speed_in_mph >= 0 AND combined_events.max_over_speed_in_mph < 5 
             THEN 1 
             ELSE 0 
           END
@@ -29,7 +30,7 @@ SELECT
           CASE 
             WHEN LOWER(combined_events.month) = LOWER('{{ month }}')
                  AND combined_events.type = '{{ event_type }}'
-                 AND combined_events.max_over_speed_in_mph BETWEEN 5 AND 10
+                 AND combined_events.max_over_speed_in_mph >= 5 AND combined_events.max_over_speed_in_mph < 6
             THEN 1 
             ELSE 0 
           END
@@ -40,7 +41,7 @@ SELECT
           CASE 
             WHEN LOWER(combined_events.month) = LOWER('{{ month }}')
                  AND combined_events.type = '{{ event_type }}'
-                 AND combined_events.max_over_speed_in_mph BETWEEN 6 AND 10
+                 AND combined_events.max_over_speed_in_mph >= 6 AND combined_events.max_over_speed_in_mph < 10
             THEN 1 
             ELSE 0 
           END
@@ -51,12 +52,20 @@ SELECT
           CASE 
             WHEN LOWER(combined_events.month) = LOWER('{{ month }}')
                  AND combined_events.type = '{{ event_type }}'
-                 AND combined_events.max_over_speed_in_mph BETWEEN 10 AND 15
+                 AND combined_events.max_over_speed_in_mph >= 10 AND combined_events.max_over_speed_in_mph < 15
             THEN 1 
             ELSE 0 
           END
         ) AS {{ month|lower }}_speeding_ten_to_fifteen
-
+       -- Speeding above 15mph
+        , SUM(  CASE 
+            WHEN LOWER(combined_events.month) = LOWER('{{ month }}')
+                 AND combined_events.type = '{{ event_type }}'
+                 AND combined_events.max_over_speed_in_mph >= 15
+            THEN 1 
+            ELSE 0 
+          END
+        ) AS {{ month|lower }}_speeding_fifteen_plus
     {%- else -%}
       -- For all other event types, just do a single column
       , SUM(

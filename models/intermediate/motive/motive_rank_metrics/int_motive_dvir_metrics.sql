@@ -4,7 +4,7 @@ WITH vehicle_map_rs AS (
 ) 
 
 , data_inspections AS (
-    SELECT * FROM public.data_inspections
+    SELECT * FROM {{ ref('stg_motive_data_inspections') }}
 )
 
 , driving_periods as (
@@ -48,7 +48,7 @@ select
 	  --,case when dp.trips = insp.inspections then 1 else 0 end as dvir_completed
 from driving_periods dp
 left join inspections insp
-	on dp.group_name = insp.group_name and dp.date = insp.date
+	on (TRIM(BOTH FROM dp.group_name) = TRIM(BOTH FROM insp.group_name)) and dp.date = insp.date
 )
 
 
