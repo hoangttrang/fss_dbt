@@ -5,17 +5,17 @@ WITH vehicle_map AS (
 )
 
 , site_region_translation AS ( 
-    SELECT *   FROM {{ ref('stg_motive_consolidated_sites') }}
+    SELECT *  FROM {{ ref('stg_motive_consolidated_sites') }}
 )
 
 , distinct_consolidated_sites AS (
-    SELECT DISTINCT translated_site, region, motive_group_name
+    SELECT DISTINCT consolidated_site, region, motive_group_name
     FROM site_region_translation
 )
 
 , joined_table AS (SELECT 
     vehicle_map.*
-    , distinct_consolidated_sites.translated_site
+    , distinct_consolidated_sites.consolidated_site AS translated_site
     , distinct_consolidated_sites.region
 FROM vehicle_map
 LEFT JOIN distinct_consolidated_sites 
