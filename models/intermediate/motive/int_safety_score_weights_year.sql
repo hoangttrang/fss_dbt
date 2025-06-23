@@ -23,7 +23,7 @@
         {%- endif -%}
     {%- endfor -%}
 {%- endfor -%}
-{%- set distinct_events = matched_event | unique -%}
+{%- set distinct_events = matched_event -%}
 
 {# Build a list of motive events NOT in the distinct events #}
 {%- set missing_from_events = [] -%}
