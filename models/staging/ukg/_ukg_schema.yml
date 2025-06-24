@@ -27,3 +27,7 @@ models:
             - job_id 
             - location_id
             - pay_group
+  - name: stg_ukg_dependent_deduction
+  - name: stg_ukg_employee_status
+  - name: stg_ukg_job
+  
