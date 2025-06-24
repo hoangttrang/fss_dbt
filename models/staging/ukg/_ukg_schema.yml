@@ -1,0 +1,29 @@
+version: 2
+
+# This is used to documentation on the database and the schema 
+models: 
+  - name: stg_ukg_employee
+  - name: stg_ukg_employment
+  - name: stg_ukg_employee_status
+    data_tests:
+      - dbt_utils.unique_combination_of_columns: 
+          combination_of_columns:
+            - company_id 
+            - employee_id
+  - name: stg_ukg_employee_change
+    data_tests:
+      - dbt_utils.unique_combination_of_columns: 
+          combination_of_columns:
+            - company_id 
+            - employee_id
+  - name: stg_ukg_earning_history_base_element
+    data_tests: 
+      - dbt_utils.unique_combination_of_columns: 
+          combination_of_columns:
+            - company_id 
+            - employee_id
+            - earning_id
+            - employment_id 
+            - job_id 
+            - location_id
+            - pay_group

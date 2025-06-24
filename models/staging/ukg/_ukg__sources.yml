@@ -1,0 +1,58 @@
+version: 2 
+
+sources: 
+  - name: ukg
+    description: Source data from UKG, the data pipes from UKG to Fivetran.
+    database: citus
+    schema: ukg_pro
+    tables: 
+      - name: employee
+        description: Employee data that contains demographic and employment information.
+        loaded_at_field: _fivetran_synced 
+        freshness: 
+          warn_after: {count: 1, period: day}
+          error_after: {count: 2, period: day}
+        columns: 
+          - name: id 
+            description: Unique identifier for the employee data
+            tests: 
+              - unique
+              - not_null
+            
+      - name: employment
+        description: Employment data that contains employment status and job information.
+        loaded_at_field: _fivetran_synced 
+        freshness: 
+          warn_after: {count: 1, period: day}
+          error_after: {count: 2, period: day}
+        columns: 
+          - name: id 
+            description: Unique identifier for the employment data. This id matches with the "Team member number" in UKG or employee_number
+            tests: 
+              - unique
+              - not_null
+      - name: employee_status
+        description: Employee status data that contains information about the employee's current status. However, the status is not completely reliable since
+          sometime an employee weren't terminated properly resulting in the employee being active even though they are not.
+        loaded_at_field: _fivetran_synced 
+        freshness: 
+          warn_after: {count: 1, period: day}
+          error_after: {count: 2, period: day}
+      - name: employee_change
+        description: Employee change data that contains information about the employee's changes. This is used to track changes in the employee data.
+        loaded_at_field: _fivetran_synced 
+        freshness: 
+          warn_after: {count: 1, period: day}
+          error_after: {count: 2, period: day}
+      - name: earning_history_base_element
+        description: Earning history base element data that contains information about the employee's earning history. This is used to track changes in the employee's earning history.
+        loaded_at_field: _fivetran_synced 
+        freshness: 
+          warn_after: {count: 1, period: day}
+          error_after: {count: 2, period: day}
+        columns:
+          - name: _fivetran_id
+            description: Unique identifier from FiveTran
+            tests:
+              - unique
+              - not_null
