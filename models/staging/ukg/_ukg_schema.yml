@@ -3,7 +3,22 @@ version: 2
 # This is used to documentation on the database and the schema 
 models: 
   - name: stg_ukg_employee
+    data_tests:
+      - dbt_utils.unique_combination_of_columns: 
+          combination_of_columns:
+            - id 
+            - employee_id
+            - company_id
+            - ssn
+            - national_id
+            - person_id
+            - address_id
   - name: stg_ukg_employment
+    data_tests:
+      - dbt_utils.unique_combination_of_columns: 
+          combination_of_columns:
+            - employee_id
+            - company_id
   - name: stg_ukg_employee_status
     data_tests:
       - dbt_utils.unique_combination_of_columns: 
@@ -26,8 +41,23 @@ models:
             - employment_id 
             - job_id 
             - location_id
-            - pay_group
   - name: stg_ukg_dependent_deduction
+    data_tests: 
+    - dbt_utils.unique_combination_of_columns: 
+        combination_of_columns:
+          - id
+          - contact_id
+          - company_id 
+          - employee_id
   - name: stg_ukg_employee_status
+    data_tests:
+      - dbt_utils.unique_combination_of_columns: 
+          combination_of_columns:
+            - company_id 
+            - employee_id
   - name: stg_ukg_job
+    data_tests:
+      - dbt_utils.unique_combination_of_columns: 
+          combination_of_columns:
+            - id
   
