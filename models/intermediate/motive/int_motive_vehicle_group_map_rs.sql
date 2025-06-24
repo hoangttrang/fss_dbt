@@ -5,29 +5,22 @@ WITH vehicle_map AS (
 )
 
 , site_region_translation AS ( 
-    SELECT * 
-    ,   -- Create translated_site with mapping logic
-    CASE 
-        WHEN consolidated_site IN (
-            'NC - ASC - Denver', 
-            'NC - ASC - Greensboro', 
-            'NC - ASC'
-        ) THEN 'NC - ASC'
-        
-        WHEN consolidated_site IN (
-            'SC - PSI Columbia',
-            'GA -PSI Augusta'
-        ) THEN 'SC - PSI'
-        ELSE consolidated_site
-    END AS translated_site
-    
-    FROM {{ ref('stg_motive_consolidated_sites') }}
+    SELECT *  FROM {{ ref('stg_motive_consolidated_sites') }}
 )
 
-SELECT 
+, distinct_consolidated_sites AS (
+    SELECT DISTINCT consolidated_site, region, motive_group_name
+    FROM site_region_translation
+)
+
+, joined_table AS (SELECT 
     vehicle_map.*
-    , site_region_translation.translated_site
-    , site_region_translation.region
+    , distinct_consolidated_sites.consolidated_site AS translated_site
+    , distinct_consolidated_sites.region
 FROM vehicle_map
-LEFT JOIN site_region_translation 
-    ON vehicle_map.group_name = site_region_translation.motive_group_name 
+LEFT JOIN distinct_consolidated_sites 
+    ON (TRIM(BOTH FROM vehicle_map.group_name) = TRIM(BOTH FROM distinct_consolidated_sites.motive_group_name)) ) 
+
+SELECT 
+ * 
+FROM joined_table

@@ -1,18 +1,3 @@
--- depends_on: {{ ref('main_safety_score_config') }}
-{%- call statement('safety_score', fetch_result=True) %}
-    SELECT motive_event_name, value 
-    FROM {{ ref('main_safety_score_config') }}
-    WHERE sub_event2 IS NOT NULL AND value IS NOT NULL
-{%- endcall -%}
-
--- get safety score from main_safety_score_config table
-{%- set safety_score_results = load_result('safety_score')['data'] %}
-{%- set safety_score_map = {} %}
--- create a dictionary of safety scores and corresponding event types
-{%- for row in safety_score_results %}
-    {%- set _ = safety_score_map.update({ row[0]: row[1] }) %}
-{%- endfor %}
-
 {% set month_str = get_current_month_str() %}
 
 -- Get sliced months from Jan to current months: 
@@ -37,20 +22,25 @@ WITH vehicle_map_rs AS (
 %}
 {# Remove double quotes, then split on commas #}
 {%- set columns_str = safety_score_event | replace('"', '') %}
+{%- set safety_event_list_pts = [] %}
 {%- set safety_event_list = [] %}
 
 {#Convert safety score columns into a list#}
 {%- for col in columns_str.split(',') -%}
-    {%- set _ = safety_event_list.append(col.strip()) -%}
+    {%- set _ = safety_event_list_pts.append(col.strip()) -%}
 {%- endfor -%}
 
+{# Create a list of events#}
+{%- for col in columns_str.split(',') -%}
+    {%- set _ = safety_event_list.append(col.strip() | replace('points_', '')) -%}
+{%- endfor -%}
 
 , safety_score_weights_by_mnth AS (SELECT 
     region 
     , translated_site
     {%- for month in var('months_list') %}
         {%set month_str =  month[:3]%}
-        {%- for event_type in safety_event_list %}
+        {%- for event_type in safety_event_list_pts %}
             {%- set score_value = get_safety_score(month_str,event_type) %}
             , {{ score_value[0] }}  AS {{ month | lower }}_{{ event_type }}
         {%- endfor %}
@@ -90,7 +80,7 @@ GROUP BY
     SELECT 
     {%- for month in var('months_list') %}
         dd.{{month | lower}}_miles_driven,
-    {%- endfor %}
+    {% endfor %}
 	eb.*
 	FROM  drive_distances dd
 	LEFT JOIN event_breakdown eb
@@ -108,7 +98,7 @@ GROUP BY
     -- Calculate total safety points for 12 months: 
     {%- for month in var('months_list') %}
         (
-        {%- for event_type in var('motive_event_type') %}
+        {%- for event_type in safety_event_list %}
             ssw.{{ month | lower}}_points_{{event_type}} * {{month | lower}}_{{event_type}}
             {%- if not loop.last %} + {% endif %}
         {%- endfor -%}
