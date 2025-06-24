@@ -56,3 +56,5 @@ sources:
             tests:
               - unique
               - not_null
+      - name: dependent_deduction
+      - name: job

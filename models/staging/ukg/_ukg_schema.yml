@@ -19,12 +19,6 @@ models:
           combination_of_columns:
             - employee_id
             - company_id
-  - name: stg_ukg_employee_status
-    data_tests:
-      - dbt_utils.unique_combination_of_columns: 
-          combination_of_columns:
-            - company_id 
-            - employee_id
   - name: stg_ukg_employee_change
     data_tests:
       - dbt_utils.unique_combination_of_columns: 

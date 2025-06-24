@@ -3,10 +3,13 @@ WITH dependent_deduction AS (
 )
 , employee AS (
     SELECT * FROM {{ ref('stg_ukg_employee') }}
+
 ), employment AS (
     SELECT * FROM {{ ref('stg_ukg_employment') }}
+
 ), job AS (
     SELECT * FROM {{ ref('stg_ukg_job') }}
+    
 ), employee_status AS (
     SELECT * FROM {{ ref('stg_ukg_employee_status') }}
 )
