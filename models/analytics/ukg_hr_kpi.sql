@@ -26,7 +26,8 @@ SELECT
     e.is_disabled,
     e.ethnic_description,
     es.status,
-    em.organization_level_4_id
+    em.organization_level_4_id,
+    em.date_of_termination
 FROM dependent_deduction d
 JOIN employee e ON d.employee_id = e.id
 JOIN employment em ON em.employee_id = e.id
