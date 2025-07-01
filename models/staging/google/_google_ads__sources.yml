@@ -1,0 +1,18 @@
+version: 2 
+
+sources: 
+  - name: google_ads
+    database: citus
+    schema: google_ads
+    tables: 
+      - name: ad_group_stats
+      - name: account_history
+      - name: campaign_history
+      - name: ad_group_history
+      - name: account_stats
+      - name: ad_stats
+      - name: ad_history
+      - name: campaign_stats
+      - name: keyword_stats
+      - name: ad_group_criterion_history
+      - name: search_term_keyword_stats

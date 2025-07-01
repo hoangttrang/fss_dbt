@@ -1,0 +1,9 @@
+version: 2 
+
+models: 
+  - name: ukg_hr_kpi
+    columns: 
+    - name: site_description
+      tests: 
+        - not_null  
+      
