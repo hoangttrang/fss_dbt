@@ -21,7 +21,7 @@ WITH dependent_deduction AS (
 
 )
 , gl_translation AS (
-    SELECT * FROM {{ ref('gl_translation') }}
+    SELECT * FROM {{ ref('int_ukg_gl_location') }}
 )
 
 SELECT 

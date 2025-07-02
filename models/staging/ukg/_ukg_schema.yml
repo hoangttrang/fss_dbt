@@ -54,4 +54,9 @@ models:
       - dbt_utils.unique_combination_of_columns: 
           combination_of_columns:
             - id
-  
+  - name: stg_ukg_organization_level
+    data_tests:
+      - dbt_utils.unique_combination_of_columns: 
+          combination_of_columns:
+            - id
+            - level

@@ -11,7 +11,7 @@ WITH employee AS (
 )
 
 , gl_translation AS (
-    SELECT * FROM {{ ref('gl_translation') }}
+    SELECT * FROM {{ ref('int_ukg_gl_location') }}
 )
 
 , dependent_deduction AS (
@@ -47,6 +47,8 @@ WITH employee AS (
         , deduction.is_dental
         , deduction.is_medical
         , deduction.is_vision   
+        , employment.employee_type_code
+        , employment.full_time_or_part_time_code
         , employment.job_description
         , job.job_family_code
         , employee.date_of_birth
@@ -85,9 +87,9 @@ SELECT
     , employment_id
     , date_of_seniority
     , original_hire_date
-    , is_dental
-    , is_medical
-    , is_vision
+    , COALESCE(is_dental, 0) AS is_dental
+    , COALESCE(is_medical, 0) AS is_medical
+    , COALESCE(is_vision, 0) AS is_vision
     , job_description
     , job_family_code
     , date_of_birth
