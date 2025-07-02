@@ -1,4 +1,6 @@
--- Get current month 
+-- This file is used to create a view that identifies potential active employees based on their employment status and recent activity.
+
+
 WITH employee AS (
     SELECT * FROM {{ ref('stg_ukg_employee') }}
 )
@@ -23,14 +25,14 @@ WITH employee AS (
         , employment.original_hire_date
         , employment.date_of_seniority
         , CASE 
-            WHEN employment.id IS NOT NULL THEN 'Has Earnings'
+            WHEN earning.employment_id IS NOT NULL THEN 'Has Earnings'
             WHEN EXTRACT(YEAR FROM  employment.date_of_seniority) = 2025 
 				AND EXTRACT(MONTH FROM employment.date_of_seniority) = EXTRACT(MONTH FROM CURRENT_DATE)
 				THEN 'Hired in ' || TO_CHAR(employment.date_of_seniority, 'MM-YYYY')
             ELSE 'No Activity'
           END AS potential_active_reason
         , CASE 
-            WHEN employment.id IS NOT NULL 
+            WHEN earning.employment_id IS NOT NULL 
                  OR (EXTRACT(YEAR FROM employment.date_of_seniority) = 2025 
 				 	AND EXTRACT(MONTH FROM employment.date_of_seniority) = EXTRACT(MONTH FROM CURRENT_DATE))
             THEN 1 	
@@ -46,13 +48,18 @@ WITH employee AS (
     ORDER BY employment.id
 )
 
-, potential_active_tab AS (
-    SELECT * 
-    FROM earnings_employment 
-    WHERE is_potential_active = 1
+, potential_active_employee AS (
+    SELECT 
+        employee.*
+        , earnings_employment.potential_active_reason
+        , earnings_employment.is_potential_active
+    FROM employee
+    LEFT JOIN earnings_employment 
+        ON employee.id = earnings_employment.employee_id
 )
 
-
 SELECT 
-    *
-FROM potential_active_tab
+    * 
+FROM potential_active_employee
+-- if you want to filter out only potential active employees, you can uncomment the WHERE clause below
+-- WHERE is_potential_active = 1 (Notes: dont do this in development since it will affect downstream models )
