@@ -4,14 +4,14 @@ version: 2
 models: 
   - name: mbr_report
     description: "This model is used to generate Motive monthly MBR report that gets update daily."
-  - name: ukg_current_employee_info
-    description: "This model is used to generate current employee information from UKG, including active employees and their benefits and their demographics. This table unique identifier is employee_id and type."
-    tests:
+  - name: ukg_hr_kpi
+    description: this model contains ALL employees hired by us or from integration. This includes both active and unactive employees
+  
+  - name: ukg_full_employee_list 
+    tests: 
       - unique:
           column_name: employee_id
       - not_null:
           column_name: employee_id
-      - not_null: 
+      - not_null:
           column_name: site_description
-  - name: ukg_hr_kpi
-    description: this model contains ALL employees hired by us or from integration. This includes both active and unactive employees
