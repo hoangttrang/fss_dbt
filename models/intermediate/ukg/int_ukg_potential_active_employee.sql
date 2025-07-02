@@ -1,3 +1,4 @@
+-- Get current month 
 WITH employee AS (
     SELECT * FROM {{ ref('stg_ukg_employee') }}
 )
@@ -20,15 +21,19 @@ WITH employee AS (
         employment.employee_id
         , employment.id AS employment_id
         , employment.original_hire_date
+        , employment.date_of_seniority
         , CASE 
-            WHEN earning.employment_id IS NOT NULL THEN 'Has Earnings'
-            WHEN EXTRACT(YEAR FROM employment.original_hire_date) = 2025 THEN 'Hired in 2025'
+            WHEN employment.id IS NOT NULL THEN 'Has Earnings'
+            WHEN EXTRACT(YEAR FROM  employment.date_of_seniority) = 2025 
+				AND EXTRACT(MONTH FROM employment.date_of_seniority) = EXTRACT(MONTH FROM CURRENT_DATE)
+				THEN 'Hired in ' || TO_CHAR(employment.date_of_seniority, 'MM-YYYY')
             ELSE 'No Activity'
           END AS potential_active_reason
         , CASE 
-            WHEN earning.employment_id IS NOT NULL 
-                 OR EXTRACT(YEAR FROM employment.original_hire_date) = 2025 
-            THEN 1 
+            WHEN employment.id IS NOT NULL 
+                 OR (EXTRACT(YEAR FROM employment.date_of_seniority) = 2025 
+				 	AND EXTRACT(MONTH FROM employment.date_of_seniority) = EXTRACT(MONTH FROM CURRENT_DATE))
+            THEN 1 	
             ELSE 0
           END AS is_potential_active
     FROM employment
@@ -47,24 +52,7 @@ WITH employee AS (
     WHERE is_potential_active = 1
 )
 
-, active_employees AS (
-    SELECT 
-        employee.*
-    FROM employee
-    LEFT JOIN employee_status status
-        ON employee.id = status.employee_id
-    LEFT JOIN employment
-        ON employee.id = employment.employee_id
-    WHERE 
-        status.status IN ('A', 'L') 
-        AND employment.id IS NOT NULL
-        AND employment.date_of_termination IS NULL
-        AND employee.id IN (
-            SELECT DISTINCT employee_id
-            FROM potential_active_tab
-        )
-)
 
 SELECT 
-    * 
-FROM active_employees
+    *
+FROM potential_active_tab

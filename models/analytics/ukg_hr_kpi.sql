@@ -41,7 +41,7 @@ SELECT
 FROM employee e
 LEFT JOIN distinct_dependent_deduction d 
     ON d.employee_id = e.id
-LEFT JOIN employment em 
+LEFT JOIN employment em Qseft
     ON em.employee_id = e.id
 LEFT JOIN job j 
     ON em.primary_job_id = j.id
