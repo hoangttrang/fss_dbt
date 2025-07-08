@@ -14,6 +14,10 @@ WITH dependent_deduction AS (
     SELECT * FROM {{ ref('stg_ukg_job') }}    
 )
 
+, compensation  AS (
+    SELECT * FROM {{ ref('stg_ukg_compensation') }}
+)
+
 , active_employee AS (
     SELECT * FROM {{ ref ('int_ukg_active_employee') }}
 )
@@ -36,6 +40,7 @@ WITH dependent_deduction AS (
 SELECT 
     e.id AS employee_id,
     em.date_of_seniority,
+    em.original_hire_date,
     em.job_description,
     j.job_family_code
     , COALESCE(d.is_dental, 0) AS is_dental
@@ -48,6 +53,7 @@ SELECT
     e.is_disabled,
     e.gender, 
     e.ethnic_description,
+    compensation.annual_salary, 
     em.organization_level_4_id AS site_id,
     gl_translation.description AS site_description,
     em.date_of_termination,
@@ -62,5 +68,8 @@ LEFT JOIN job j
     ON em.primary_job_id = j.id
 LEFT JOIN gl_translation 
     ON em.organization_level_4_id = gl_translation.code
+LEFT JOIN compensation
+    ON e.id = compensation.employee_id
+    AND em.primary_job_id = compensation.primary_job_id
 LEFT JOIN active_employee ae -- join on employee_id/id 
     ON e.id = ae.id

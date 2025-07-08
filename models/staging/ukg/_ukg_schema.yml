@@ -60,3 +60,11 @@ models:
           combination_of_columns:
             - id
             - level
+  - name: stg_ukg_compensation
+    data_tests:
+      - dbt_utils.unique_combination_of_columns: 
+          combination_of_columns:
+            - company_id
+            - employee_id
+            - pay_group
+            - primary_job_id
