@@ -14,13 +14,34 @@ WITH dependent_deduction AS (
     SELECT * FROM {{ ref('stg_ukg_job') }}    
 )
 
-, compensation  AS (
-    SELECT * FROM {{ ref('stg_ukg_compensation') }}
+, pay_register AS (
+    SELECT * FROM {{ ref('stg_ukg_pay_register') }}
 )
 
 , active_employee AS (
     SELECT * FROM {{ ref ('int_ukg_active_employee') }}
 )
+
+, latest_annual_salary AS (
+    SELECT 
+        t1.employee_id,
+        t1.employment_id,
+        t1.annual_salary AS latest_salary,
+        t1.pay_date AS latest_pay_date
+    FROM pay_register t1
+    INNER JOIN (
+        SELECT 
+            employee_id,
+            employment_id,
+            MAX(pay_date) as pay_date
+        FROM pay_register
+        GROUP BY employee_id
+            , employment_id
+    ) t2 ON t1.employee_id = t2.employee_id 
+        AND t1.pay_date = t2.pay_date
+        AND t1.employment_id = t2.employment_id
+)
+
 
 , distinct_dependent_deduction AS (
     SELECT
@@ -39,9 +60,11 @@ WITH dependent_deduction AS (
 
 SELECT 
     e.id AS employee_id,
+    em.id AS employment_id,
     em.date_of_seniority,
     em.original_hire_date,
     em.job_description,
+    j.id AS job_id,
     j.job_family_code
     , COALESCE(d.is_dental, 0) AS is_dental
     , COALESCE(d.is_medical, 0) AS is_medical
@@ -53,7 +76,8 @@ SELECT
     e.is_disabled,
     e.gender, 
     e.ethnic_description,
-    compensation.annual_salary, 
+    latest_annual_salary.latest_salary, 
+    latest_annual_salary.latest_pay_date,
     em.organization_level_4_id AS site_id,
     gl_translation.description AS site_description,
     em.date_of_termination,
@@ -68,8 +92,8 @@ LEFT JOIN job j
     ON em.primary_job_id = j.id
 LEFT JOIN gl_translation 
     ON em.organization_level_4_id = gl_translation.code
-LEFT JOIN compensation
-    ON e.id = compensation.employee_id
-    AND em.primary_job_id = compensation.primary_job_id
+LEFT JOIN latest_annual_salary
+    ON e.id = latest_annual_salary.employment_id
+    AND em.id = latest_annual_salary.employment_id
 LEFT JOIN active_employee ae -- join on employee_id/id 
     ON e.id = ae.id

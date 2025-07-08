@@ -60,3 +60,4 @@ sources:
       - name: job
       - name: organization_level
       - name: compensation
+      - name: pay_register

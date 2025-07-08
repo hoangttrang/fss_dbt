@@ -68,3 +68,16 @@ models:
             - employee_id
             - pay_group
             - primary_job_id
+  - name: stg_ukg_pay_register
+    data_tests:
+      - dbt_utils.unique_combination_of_columns: 
+          combination_of_columns:
+            - company_id
+            - employee_id
+            - employment_id
+            - location_id 
+            - organization_level_1_id
+            - organization_level_2_id
+            - organization_level_3_id
+            - organization_level_4_id
+            - pay_group
