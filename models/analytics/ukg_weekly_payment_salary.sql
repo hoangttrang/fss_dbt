@@ -30,5 +30,12 @@ WHERE eh._fivetran_deleted = 'false'
 )
 
 
-select DISTINCT * 
-from pay_period
+SELECT 
+    pay_date
+    , site_description
+    , SUM(current_amount) AS total_weekly_salary
+FROM pay_period
+GROUP BY 
+    pay_date
+    , site_description
+    
