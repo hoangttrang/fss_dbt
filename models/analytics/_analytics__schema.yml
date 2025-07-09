@@ -15,3 +15,4 @@ models:
           column_name: employee_id
       - not_null:
           column_name: site_description
+  - name: ukg_weekly_payment_salary

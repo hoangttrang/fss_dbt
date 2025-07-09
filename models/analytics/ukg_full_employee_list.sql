@@ -26,7 +26,7 @@ WITH dependent_deduction AS (
     SELECT 
         t1.employee_id,
         t1.employment_id,
-        t1.annual_salary AS latest_salary,
+        t1.annual_salary AS latest_annual_salary,
         t1.pay_date AS latest_pay_date
     FROM pay_register t1
     INNER JOIN (
@@ -76,7 +76,7 @@ SELECT
     e.is_disabled,
     e.gender, 
     e.ethnic_description,
-    latest_annual_salary.latest_salary, 
+    latest_annual_salary.latest_annual_salary, 
     latest_annual_salary.latest_pay_date,
     em.organization_level_4_id AS site_id,
     gl_translation.description AS site_description,
@@ -93,7 +93,7 @@ LEFT JOIN job j
 LEFT JOIN gl_translation 
     ON em.organization_level_4_id = gl_translation.code
 LEFT JOIN latest_annual_salary
-    ON e.id = latest_annual_salary.employment_id
+    ON e.id = latest_annual_salary.employee_id
     AND em.id = latest_annual_salary.employment_id
 LEFT JOIN active_employee ae -- join on employee_id/id 
     ON e.id = ae.id
