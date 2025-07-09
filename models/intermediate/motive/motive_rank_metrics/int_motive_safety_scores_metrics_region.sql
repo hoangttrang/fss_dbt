@@ -1,3 +1,4 @@
+-- By REGION
 {% set month_str = get_current_month_str() %}
 
 -- Get sliced months from Jan to current months: 
@@ -33,7 +34,6 @@ WITH vehicle_map_rs AS (
 
 , safety_score_weights_by_mnth AS (SELECT 
     region 
-    , translated_site
     {%- for month in var('months_list') %}
         {%set month_str =  month[:3]%}
         {%- for event_type in safety_event_list_pts %}
@@ -50,15 +50,28 @@ WHERE translated_site IS NOT NULL
     FROM safety_score_weights_by_mnth
 )
 
-, combined_dd_and_eb AS ( 
+, safety_score_calculation AS ( 
     SELECT *
     FROM {{ ref('int_motive_safety_scores_calculation') }} 
+)
+
+, combined_dd_and_eb AS (
+    SELECT 
+    region
+    {% for month in var('months_list') %}
+    , SUM({{month | lower}}_miles_driven) AS {{month | lower}}_miles_driven
+        {% for event_type in safety_event_list %}
+        , SUM({{month | lower}}_{{event_type}}) AS {{month | lower}}_{{event_type}}
+        {% endfor %}
+    {% endfor %}
+    
+    FROM safety_score_calculation
+    GROUP BY region
 )
 
 , safety_score_breakdown AS (
     SELECT 
     cddeb.region, 
-    cddeb.translated_site, 
     {%- for month in var('months_list') %}
        {{month | lower}}_miles_driven,
     {%- endfor %}
@@ -75,13 +88,12 @@ WHERE translated_site IS NOT NULL
     {%- endfor %}
     FROM combined_dd_and_eb cddeb
     LEFT JOIN safety_score_weights ssw 
-      ON cddeb.translated_site = ssw.translated_site
+      ON cddeb.region = ssw.region
 )
 
 , safety_scores_unranked AS (
     SELECT 
     ssb.region as "Region"
-    , ssb.translated_site as "Location"
     , 'Site Safety Score' as "Metric"
     -- Calculate the safety score for each month over 100:
     {%- for month in valid_months %}

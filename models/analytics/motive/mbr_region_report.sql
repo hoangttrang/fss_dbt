@@ -1,6 +1,11 @@
 {% set month_str = get_current_month_str() %}
 
-WITH dvir_region_metrics_region AS (
+WITH safety_scores_metrics AS (
+    SELECT * FROM {{ ref('int_motive_safety_scores_metrics_region') }}
+)
+
+
+, dvir_region_metrics_region AS (
     SELECT * FROM {{ ref('int_motive_dvir_metrics_region') }}
 )
 
@@ -47,6 +52,12 @@ WITH dvir_region_metrics_region AS (
 )
 
 -- Give Region Ranking for metrics 
+, safety_scores_rank_region AS (
+    SELECT *
+        , RANK() OVER (PARTITION BY "Metric" ORDER BY "{{ month_str }}" DESC) AS "Region Rank"
+    FROM safety_scores_metrics    
+)
+
 , dvir_rank_region AS ( 
     SELECT *,
         RANK() OVER (PARTITION BY "Metric" ORDER BY "{{ month_str }}" DESC) AS "Region Rank"
@@ -89,6 +100,8 @@ WITH dvir_region_metrics_region AS (
     SELECT * FROM events_moved_to_uncoachable_rank_region
     UNION ALL 
     SELECT * FROM events_per_vehicle_rank_region
+    UNION ALL 
+    SELECT * FROM safety_scores_rank_region
 )
 
 , final_table AS (SELECT 

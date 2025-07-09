@@ -44,4 +44,5 @@ GROUP BY
 SELECT 
 * 
 FROM combined_dd_and_eb
+WHERE translated_site IS NOT NULL
 
