@@ -16,11 +16,11 @@ WITH safety_scores_metrics AS (
 )
 
 , pct_unassigned_final_metrics AS ( 
-    SELECT * FROM {{ ref('int_motive_event_unassigned_metrics') }}
+    SELECT * FROM {{ ref('int_motive_event_unassigned_metrics_sites') }}
 )
 
 , dvir_metrics AS ( 
-    SELECT * FROM {{ ref('int_motive_dvir_metrics') }}
+    SELECT * FROM {{ ref('int_motive_dvir_metrics_sites') }}
 )
 
 
