@@ -1,10 +1,10 @@
 
 WITH safety_scores_metrics AS (
-    SELECT * FROM {{ ref('int_motive_safety_scores_metrics') }}
+    SELECT * FROM {{ ref('int_motive_safety_scores_metrics_sites') }}
 )
 
 , final_events_per_vehicle_metrics AS (
-    SELECT * FROM {{ ref('int_motive_events_p_vehicles_metrics') }}
+    SELECT * FROM {{ ref('int_motive_events_p_vehicles_metrics_sites') }}
 )
 
 , final_events_moved_to_uncoachable_metrics AS ( 
@@ -16,11 +16,11 @@ WITH safety_scores_metrics AS (
 )
 
 , pct_unassigned_final_metrics AS ( 
-    SELECT * FROM {{ ref('int_motive_event_unassigned_metrics') }}
+    SELECT * FROM {{ ref('int_motive_event_unassigned_metrics_sites') }}
 )
 
 , dvir_metrics AS ( 
-    SELECT * FROM {{ ref('int_motive_dvir_metrics') }}
+    SELECT * FROM {{ ref('int_motive_dvir_metrics_sites') }}
 )
 
 
