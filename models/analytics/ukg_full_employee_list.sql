@@ -62,7 +62,9 @@ SELECT
     e.id AS employee_id,
     em.id AS employment_id,
     em.date_of_seniority,
+    em.last_hire_date, -- last hire date is when the employee got rehired
     em.original_hire_date,
+    em.hire_source, 
     em.job_description,
     j.id AS job_id,
     j.job_family_code
