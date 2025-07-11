@@ -24,7 +24,7 @@ WITH monthly_events AS (
         region as "Region"
         , translated_site as "Location"
         , 'Events Pending Review' as "Metric"
-        {%- for month in var('months_list') -%}
+        {%- for month in var('months_list') %}
         , COUNT(DISTINCT CASE WHEN month = '{{ month }}' THEN event_id END) AS "{{ month }}"
         {%- endfor %}
     FROM monthly_events 
