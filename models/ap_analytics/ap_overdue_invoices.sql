@@ -13,8 +13,9 @@ SELECT
     , CASE
         WHEN CURRENT_DATE - due_date <= 5 THEN '0-5'
         WHEN CURRENT_DATE - due_date <= 10 THEN '5-10'
-        WHEN CURRENT_DATE - due_date <= 15 THEN '15-20'
-        WHEN CURRENT_DATE - due_date <= 20 THEN '20-25'
+        WHEN CURRENT_DATE - due_date <= 15 THEN '10-15'
+        WHEN CURRENT_DATE - due_date <= 20 THEN '15-20'
+        WHEN CURRENT_DATE - due_date <= 25 THEN '20-25'
         ELSE '25+'
     END AS overdue_bucket
     , invoice_num
