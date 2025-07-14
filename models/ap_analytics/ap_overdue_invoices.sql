@@ -18,6 +18,14 @@ SELECT
         WHEN CURRENT_DATE - due_date <= 25 THEN '20-25'
         ELSE '25+'
     END AS overdue_bucket
+    , CASE 
+        WHEN CURRENT_DATE - due_date <= 5 THEN 1
+        WHEN CURRENT_DATE - due_date <= 10 THEN 2
+        WHEN CURRENT_DATE - due_date <= 15 THEN 3
+        WHEN CURRENT_DATE - due_date <= 20 THEN 4
+        WHEN CURRENT_DATE - due_date <= 25 THEN 5
+        ELSE 6
+    END AS overdue_bucket_sort
     , invoice_num
     , record_url
     , state
