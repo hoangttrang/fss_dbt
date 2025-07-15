@@ -62,6 +62,7 @@ SELECT
     e.id AS employee_id,
     e.first_name,
     e.last_name,
+    e.ssn, -- consider masking this field
     em.id AS employment_id,
     em.date_of_seniority,
     em.last_hire_date, -- last hire date is when the employee got rehired
