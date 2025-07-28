@@ -1,5 +1,6 @@
 
 {% set month_str = get_current_month_str() %}
+{% set prev_month_str = get_previous_month_str() %}
 
 WITH safety_scores_metrics AS (
     SELECT * FROM {{ ref('int_motive_safety_scores_metrics_sites') }}
@@ -30,7 +31,9 @@ WITH safety_scores_metrics AS (
 
     SELECT *,
         RANK() OVER (ORDER BY "{{month_str}}" DESC) AS "Company Rank",
-        RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" DESC) AS "Region Rank"
+        RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" DESC) AS "Region Rank",
+        RANK() OVER (ORDER BY "{{prev_month_str}}" DESC) AS "Prev Company Rank",
+        RANK() OVER (PARTITION BY "Region" ORDER BY "{{prev_month_str}}" DESC) AS "Prev Region Rank"
     FROM safety_scores_metrics
     WHERE "Location" IS NOT NULL
     
@@ -41,6 +44,8 @@ WITH safety_scores_metrics AS (
     SELECT *
         , RANK() OVER (ORDER BY "{{month_str}}" ASC) AS "Company Rank" 
         , RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" ASC) AS "Region Rank"
+        , RANK() OVER (ORDER BY "{{prev_month_str}}" ASC) AS "Prev Company Rank"
+        , RANK() OVER (PARTITION BY "Region" ORDER BY "{{prev_month_str}}" ASC) AS "Prev Region Rank"
     FROM final_events_per_vehicle_metrics
     WHERE "Location" IS NOT NULL
 
@@ -50,7 +55,9 @@ WITH safety_scores_metrics AS (
 
     SELECT *, 
         RANK() OVER (ORDER BY "{{month_str}}" ASC) AS "Company Rank",
-        RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" ASC) AS "Region Rank"
+        RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" ASC) AS "Region Rank", 
+        RANK() OVER (ORDER BY "{{prev_month_str}}" ASC) AS "Prev Company Rank",
+        RANK() OVER (PARTITION BY "Region" ORDER BY "{{prev_month_str}}" ASC) AS "Prev Region Rank"
     FROM final_events_moved_to_uncoachable_metrics
     WHERE "Location" IS NOT NULL
 
@@ -59,8 +66,10 @@ WITH safety_scores_metrics AS (
 , final_events_pending_review_rank AS ( 
 
     SELECT *,
-        RANK() OVER (ORDER BY "{{month_str}}" ASC) AS "Company Rank",
-        RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" ASC) AS "Region Rank"
+        RANK() OVER (ORDER BY "{{month_str}}" ASC) AS "Company Rank"
+        , RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" ASC) AS "Region Rank"
+        , RANK() OVER (ORDER BY "{{prev_month_str}}" ASC) AS "Prev Company Rank"
+        , RANK() OVER (PARTITION BY "Region" ORDER BY "{{prev_month_str}}" ASC) AS "Prev Region Rank"
     FROM final_events_pending_review_metrics 
     WHERE "Location" IS NOT NULL
 
@@ -70,7 +79,9 @@ WITH safety_scores_metrics AS (
 
     SELECT *, 
         RANK() OVER (ORDER BY "{{month_str}}" ASC) AS "Company Rank",
-        RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" ASC) AS "Region Rank"
+        RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" ASC) AS "Region Rank", 
+        RANK() OVER (ORDER BY "{{prev_month_str}}" ASC) AS "Prev Company Rank",
+        RANK() OVER (PARTITION BY "Region" ORDER BY "{{prev_month_str}}" ASC) AS "Prev Region Rank"
     FROM pct_unassigned_final_metrics
     WHERE "Location" IS NOT NULL
 
@@ -80,7 +91,9 @@ WITH safety_scores_metrics AS (
 
     SELECT *,
         RANK() OVER (PARTITION BY "Metric" ORDER BY "{{ month_str }}" DESC) AS "Company Rank",
-        RANK() OVER (PARTITION BY "Metric", "Region" ORDER BY "{{ month_str }}" DESC) AS "Region Rank"
+        RANK() OVER (PARTITION BY "Metric", "Region" ORDER BY "{{ month_str }}" DESC) AS "Region Rank", 
+        RANK() OVER (PARTITION BY "Metric" ORDER BY "{{ prev_month_str }}" DESC) AS "Prev Company Rank",
+        RANK() OVER (PARTITION BY "Metric", "Region" ORDER BY "{{ prev_month_str }}" DESC) AS "Prev Region Rank"
     FROM dvir_metrics
     WHERE "Location" IS NOT NULL
     ORDER BY "Metric", "Region", "Location"
@@ -116,4 +129,6 @@ SELECT
     {%- endfor %}
     , "Company Rank"
     , "Region Rank"
+    , "Prev Company Rank"
+    , "Prev Region Rank"
 FROM unioned_table
