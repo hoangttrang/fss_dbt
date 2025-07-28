@@ -1,4 +1,6 @@
 {% set month_str = get_current_month_str() %}
+{% set prev_month_str = get_previous_month_str() %}
+
 
 WITH safety_scores_metrics AS (
     SELECT * FROM {{ ref('int_motive_safety_scores_metrics_region') }}
@@ -54,38 +56,44 @@ WITH safety_scores_metrics AS (
 -- Give Region Ranking for metrics 
 , safety_scores_rank_region AS (
     SELECT *
-        , RANK() OVER (PARTITION BY "Metric" ORDER BY "{{ month_str }}" DESC) AS "Region Rank"
+        , RANK() OVER (PARTITION BY "Metric" ORDER BY "{{month_str}}" DESC) AS "Region Rank"
+        , RANK() OVER (PARTITION BY "Metric" ORDER BY "{{prev_month_str}}" DESC) AS "Prev Region Rank"
     FROM safety_scores_metrics    
 )
 
 , dvir_rank_region AS ( 
     SELECT *,
-        RANK() OVER (PARTITION BY "Metric" ORDER BY "{{ month_str }}" DESC) AS "Region Rank"
+        RANK() OVER (PARTITION BY "Metric" ORDER BY "{{month_str}}" DESC) AS "Region Rank"
+        , RANK() OVER (PARTITION BY "Metric" ORDER BY "{{prev_month_str}}" DESC) AS "Prev Region Rank"
     FROM dvir_region_metrics_region
     ORDER BY "Metric", "Region"
 )
 
 , events_per_vehicle_rank_region AS (
     SELECT *
-        , RANK() OVER (PARTITION BY "Metric" ORDER BY "{{ month_str }}" DESC) AS "Region Rank"
+        , RANK() OVER (PARTITION BY "Metric" ORDER BY "{{month_str}}" ASC) AS "Region Rank"
+        , RANK() OVER (PARTITION BY "Metric" ORDER BY "{{prev_month_str}}" ASC) AS "Prev Region Rank"
     FROM events_per_vehicle_metrics_region
 )
 
 , events_pending_review_rank_region AS ( 
     SELECT *,
         RANK() OVER (ORDER BY "{{month_str}}" ASC) AS "Region Rank"
+        , RANK() OVER (ORDER BY "{{prev_month_str}}" ASC) AS "Prev Region Rank"
     FROM event_pending_review_region_metrics 
 )
 
 , pct_unassigned_final_rank_region AS ( 
     SELECT *, 
         RANK() OVER (ORDER BY "{{month_str}}" ASC) AS "Region Rank"
+        , RANK() OVER (ORDER BY "{{prev_month_str}}" ASC) AS "Prev Region Rank"
     FROM pct_unassigned_final_metrics_region
 )
 
 , events_moved_to_uncoachable_rank_region AS ( 
     SELECT *, 
         RANK() OVER (ORDER BY "{{month_str}}" ASC) AS "Region Rank"
+        , RANK() OVER (ORDER BY "{{prev_month_str}}" ASC) AS "Prev Region Rank"
     FROM events_moved_to_uncoachable_metrics
 ) 
 
@@ -111,6 +119,7 @@ WITH safety_scores_metrics AS (
         , ROUND("{{month}}"::NUMERIC, 3) AS "{{month}}"
     {%- endfor %}
     , "Region Rank"
+    , "Prev Region Rank"
 FROM union_table)
 
 select * from final_table
