@@ -26,7 +26,17 @@ WITH safety_scores_metrics AS (
     SELECT * FROM {{ ref('int_motive_dvir_metrics_sites') }}
 )
 
-
+, rounded_safety_scores AS (
+    SELECT 
+        "Region"
+        , "Location"
+        , "Metric"
+    {%- for month in var('months_list') %}
+        , ROUND("{{month}}"::NUMERIC, 2) AS "{{month}}"
+    {%- endfor %}
+    FROM safety_scores_metrics
+    WHERE "Location" IS NOT NULL
+)
 , safety_scores_ranked AS (
 
     SELECT *,
@@ -34,9 +44,20 @@ WITH safety_scores_metrics AS (
         RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" DESC) AS "Region Rank",
         RANK() OVER (ORDER BY "{{prev_month_str}}" DESC) AS "Prev Company Rank",
         RANK() OVER (PARTITION BY "Region" ORDER BY "{{prev_month_str}}" DESC) AS "Prev Region Rank"
-    FROM safety_scores_metrics
-    WHERE "Location" IS NOT NULL
+    FROM rounded_safety_scores
     
+)
+
+, rounded_events_per_vehicle AS (
+    SELECT 
+        "Region"
+        , "Location"
+        , "Metric"
+    {%- for month in var('months_list') %}
+        , ROUND("{{month}}"::NUMERIC, 2) AS "{{month}}"
+    {%- endfor %}
+    FROM final_events_per_vehicle_metrics
+    WHERE "Location" IS NOT NULL
 )
 
 , final_events_per_vehicle_rank AS (
@@ -46,9 +67,21 @@ WITH safety_scores_metrics AS (
         , RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" ASC) AS "Region Rank"
         , RANK() OVER (ORDER BY "{{prev_month_str}}" ASC) AS "Prev Company Rank"
         , RANK() OVER (PARTITION BY "Region" ORDER BY "{{prev_month_str}}" ASC) AS "Prev Region Rank"
-    FROM final_events_per_vehicle_metrics
-    WHERE "Location" IS NOT NULL
+    FROM rounded_events_per_vehicle
 
+)
+
+, rounded_events_moved_to_uncoachable AS ( 
+
+    SELECT 
+        "Region"
+        , "Location"
+        , "Metric"
+    {%- for month in var('months_list') %}
+        , ROUND("{{month}}"::NUMERIC, 2) AS "{{month}}"
+    {%- endfor %}
+    FROM final_events_moved_to_uncoachable_metrics
+    WHERE "Location" IS NOT NULL
 )
 
 , final_events_moved_to_uncoachable_rank AS ( 
@@ -58,10 +91,21 @@ WITH safety_scores_metrics AS (
         RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" ASC) AS "Region Rank", 
         RANK() OVER (ORDER BY "{{prev_month_str}}" ASC) AS "Prev Company Rank",
         RANK() OVER (PARTITION BY "Region" ORDER BY "{{prev_month_str}}" ASC) AS "Prev Region Rank"
-    FROM final_events_moved_to_uncoachable_metrics
-    WHERE "Location" IS NOT NULL
-
+    FROM rounded_events_moved_to_uncoachable
 ) 
+
+, rounded_events_pending_review AS ( 
+
+    SELECT 
+        "Region"
+        , "Location"
+        , "Metric"
+    {%- for month in var('months_list') %}
+        , ROUND("{{month}}"::NUMERIC, 2) AS "{{month}}"
+    {%- endfor %}
+    FROM final_events_pending_review_metrics 
+    WHERE "Location" IS NOT NULL
+)
 
 , final_events_pending_review_rank AS ( 
 
@@ -70,9 +114,21 @@ WITH safety_scores_metrics AS (
         , RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" ASC) AS "Region Rank"
         , RANK() OVER (ORDER BY "{{prev_month_str}}" ASC) AS "Prev Company Rank"
         , RANK() OVER (PARTITION BY "Region" ORDER BY "{{prev_month_str}}" ASC) AS "Prev Region Rank"
-    FROM final_events_pending_review_metrics 
-    WHERE "Location" IS NOT NULL
+    FROM rounded_events_pending_review
 
+)
+
+, rounded_pct_unassigned AS ( 
+
+    SELECT 
+        "Region"
+        , "Location"
+        , "Metric"
+    {%- for month in var('months_list') %}
+        , ROUND("{{month}}"::NUMERIC, 2) AS "{{month}}"
+    {%- endfor %}
+    FROM pct_unassigned_final_metrics
+    WHERE "Location" IS NOT NULL
 )
 
 , pct_unassigned_final_rank AS ( 
@@ -82,9 +138,21 @@ WITH safety_scores_metrics AS (
         RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" ASC) AS "Region Rank", 
         RANK() OVER (ORDER BY "{{prev_month_str}}" ASC) AS "Prev Company Rank",
         RANK() OVER (PARTITION BY "Region" ORDER BY "{{prev_month_str}}" ASC) AS "Prev Region Rank"
-    FROM pct_unassigned_final_metrics
-    WHERE "Location" IS NOT NULL
+    FROM rounded_pct_unassigned
 
+)
+
+, rounded_dvir AS ( 
+
+    SELECT 
+        "Region"
+        , "Location"
+        , "Metric"
+    {%- for month in var('months_list') %}
+        , ROUND("{{month}}"::NUMERIC, 3) AS "{{month}}"
+    {%- endfor %}
+    FROM dvir_metrics
+    WHERE "Location" IS NOT NULL
 )
 
 , dvir_rank AS ( 
@@ -94,8 +162,7 @@ WITH safety_scores_metrics AS (
         RANK() OVER (PARTITION BY "Metric", "Region" ORDER BY "{{ month_str }}" DESC) AS "Region Rank", 
         RANK() OVER (PARTITION BY "Metric" ORDER BY "{{ prev_month_str }}" DESC) AS "Prev Company Rank",
         RANK() OVER (PARTITION BY "Metric", "Region" ORDER BY "{{ prev_month_str }}" DESC) AS "Prev Region Rank"
-    FROM dvir_metrics
-    WHERE "Location" IS NOT NULL
+    FROM rounded_dvir
     ORDER BY "Metric", "Region", "Location"
 
 )
@@ -121,14 +188,5 @@ SELECT * FROM dvir_rank
 ) 
 
 SELECT 
-    "Region"
-    , "Location"
-    , "Metric"
-    {%- for month in var('months_list') %}
-        , ROUND("{{month}}"::NUMERIC, 2) AS "{{month}}"
-    {%- endfor %}
-    , "Company Rank"
-    , "Region Rank"
-    , "Prev Company Rank"
-    , "Prev Region Rank"
+    *
 FROM unioned_table
