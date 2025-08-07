@@ -98,4 +98,4 @@ GROUP BY
 ORDER BY
     year DESC,
     site_description,
-    job_family_code;
+    job_family_code
