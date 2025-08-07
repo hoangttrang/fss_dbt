@@ -23,4 +23,10 @@ models:
             - invoice_num 
             - vendor_id 
             - line_no
-  
+  - name: stg_sage_gl_detail
+    description: This table stores the general ledger detail information. It tracks if a record is deleted. It doesn't track status changes.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - recordno
+            - department_id

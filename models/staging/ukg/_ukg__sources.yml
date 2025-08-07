@@ -56,3 +56,8 @@ sources:
             tests:
               - unique
               - not_null
+      - name: dependent_deduction
+      - name: job
+      - name: organization_level
+      - name: compensation
+      - name: pay_register
