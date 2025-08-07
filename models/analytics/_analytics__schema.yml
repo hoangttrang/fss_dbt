@@ -16,7 +16,7 @@ models:
           column_name: site_description
   - name: ukg_weekly_payment_salary
   - name: ukg_hourly_salary_spend
-  - name: ggl_ads_campaigns_report
+  - name: ggl_ads_campaign_report
     description: "Google Ads campaigns data."
   - name: dc_registration_users
     description: "This model is used to map digital chalk registration users to their respective users with user name, email."
