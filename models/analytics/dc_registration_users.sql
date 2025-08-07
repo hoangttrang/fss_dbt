@@ -15,20 +15,26 @@ WITH dc_registrations AS (
 
 
 SELECT 
-    r.*
+    r.begin_date
+    , r.end_date
+    , r.grade
+    , r.last_active_date
+    , r.offeringId
+    , r.title
+    , r.status
+    , r.created_date
 	, u.first_name AS dc_first_name
     , u.last_name AS dc_last_name
     , u.username AS dc_username
     , u.email AS dc_email
     , u.tags AS tags 
     , u.locale AS dc_locale
-    , u.created_date AS user_created_date
     , u.last_login_date AS user_last_login_date
 	, employee_list.site_id AS region
 	, employee_list.site_description AS site
-	, employee_list.employment_id
+	, employee_list.employment_id AS ukg_employment_id
 FROM dc_registrations r
-INNER JOIN dc_users u 
+LEFT JOIN dc_users u 
 	ON r.dc_user_id = u.dc_user_id
 LEFT JOIN full_ukg_employee_list employee_list	
 	ON LOWER(u.email) = LOWER(employee_list.email_address)
