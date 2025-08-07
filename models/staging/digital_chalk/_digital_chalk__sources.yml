@@ -1,0 +1,12 @@
+version: 2 
+
+sources: 
+  - name: digital_chalk
+    database: citus
+    schema: public
+    description: "Digital Chalk source data."
+    tables: 
+      - name: data_digital_chalk_registrations
+        description: "Digital Chalk registrations data."
+      - name: data_digital_chalk_users
+        description: "Digital Chalk users data."

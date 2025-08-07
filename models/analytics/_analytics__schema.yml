@@ -3,7 +3,9 @@ version: 2
 # This is used to documentation on the database and the schema 
 models: 
   - name: mbr_report
-    description: "This model is used to generate Motive monthly MBR report that gets update daily."
+    description: "This model is used to generate Motive monthly MBR report by region by site that gets update daily."
+  - name: mbr_region_report 
+    description: "This model is used to generate Motive monthly MBR report by region that gets update daily."
   - name: ukg_full_employee_list 
     tests: 
       - unique:
@@ -13,8 +15,8 @@ models:
       - not_null:
           column_name: site_description
   - name: ukg_weekly_payment_salary
-  - name: ukg_hr_kpi
-  - name: ukg_hr_kpi_history
-    tests:   
-      - not_null:
-          column_name: site_description
+  - name: ukg_hourly_salary_spend
+  - name: ggl_ads_campaigns_report
+    description: "Google Ads campaigns data."
+  - name: dc_registration_users
+    description: "This model is used to map digital chalk registration users to their respective users with user name, email."
