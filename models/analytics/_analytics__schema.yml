@@ -4,9 +4,6 @@ version: 2
 models: 
   - name: mbr_report
     description: "This model is used to generate Motive monthly MBR report that gets update daily."
-  - name: ukg_hr_kpi
-    description: this model contains ALL employees hired by us or from integration. This includes both active and unactive employees
-  
   - name: ukg_full_employee_list 
     tests: 
       - unique:
