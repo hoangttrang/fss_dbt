@@ -63,6 +63,7 @@ WITH dependent_deduction AS (
     e.first_name,
     e.last_name,
     e.preferred_name, 
+    e.email_address,
     em.id AS employment_id,
     em.date_of_seniority,
     em.last_hire_date, -- last hire date is when the employee got rehired
