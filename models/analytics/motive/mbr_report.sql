@@ -26,6 +26,27 @@ WITH safety_scores_metrics AS (
     SELECT * FROM {{ ref('int_motive_dvir_metrics_sites') }}
 )
 
+-- Import miles driven as a metric 
+, combined_dd_and_eb AS ( 
+    SELECT * 
+    FROM {{ ref('int_motive_safety_scores_calculation') }} 
+)
+
+, monthly_miles_driven AS ( 
+    SELECT
+        region AS "Region"
+        , translated_site AS "Location"
+        , 'Miles Driven' AS "Metric"
+        {%- for month in var('months_list') %}
+        , ROUND( {{month}}_miles_driven ::NUMERIC, 2) AS "{{month}}"
+        {%- endfor %}
+        , RANK() OVER (ORDER BY {{month_str}}_miles_driven DESC) AS "Company Rank"
+        , RANK() OVER (PARTITION BY region ORDER BY {{month_str}}_miles_driven DESC) AS "Region Rank"
+        , RANK() OVER (ORDER BY {{prev_month_str}}_miles_driven DESC) AS "Prev Company Rank"
+        , RANK() OVER (PARTITION BY region ORDER BY {{prev_month_str}}_miles_driven DESC) AS "Prev Region Rank"
+    FROM combined_dd_and_eb
+)
+
 , rounded_safety_scores AS (
     SELECT 
         "Region"
@@ -185,7 +206,9 @@ SELECT *
 FROM safety_scores_ranked
 UNION ALL 
 SELECT * FROM dvir_rank
-) 
+UNION ALL 
+SELECT * FROM monthly_miles_driven
+)
 
 SELECT 
     *
