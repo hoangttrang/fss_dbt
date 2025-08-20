@@ -50,7 +50,7 @@ WITH safety_scores_metrics AS (
         "Region"
         , "Metric"
         {%- for month in var('months_list') %}
-        , ROUND( "{{month}}" ::NUMERIC, 2) AS "{{month}}"
+        , ROUND("{{month}}"::NUMERIC) AS "{{month}}"
         {%- endfor %}
         , RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" DESC) AS "Region Rank"
         , RANK() OVER (PARTITION BY "Region" ORDER BY "{{prev_month_str}}" DESC) AS "Prev Region Rank"

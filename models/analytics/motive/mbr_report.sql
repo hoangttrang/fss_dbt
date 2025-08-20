@@ -38,7 +38,7 @@ WITH safety_scores_metrics AS (
         , translated_site AS "Location"
         , 'Miles Driven' AS "Metric"
         {%- for month in var('months_list') %}
-        , ROUND( {{month}}_miles_driven ::NUMERIC, 2) AS "{{month}}"
+        , ROUND({{month}}_miles_driven::NUMERIC) AS "{{month}}"
         {%- endfor %}
         , RANK() OVER (ORDER BY {{month_str}}_miles_driven DESC) AS "Company Rank"
         , RANK() OVER (PARTITION BY region ORDER BY {{month_str}}_miles_driven DESC) AS "Region Rank"
