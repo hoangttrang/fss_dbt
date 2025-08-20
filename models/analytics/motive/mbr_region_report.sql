@@ -27,6 +27,26 @@ WITH safety_scores_metrics AS (
     SELECT * FROM {{ ref('int_motive_events_p_vehicles_metrics_region') }}
 )
 
+
+-- Import miles driven as a metric 
+, combined_dd_and_eb AS ( 
+    SELECT * 
+    FROM {{ ref('int_motive_safety_scores_calculation') }} 
+)
+
+, monthly_miles_driven AS ( 
+    SELECT
+        region AS "Region"
+        , 'Miles Driven' AS "Metric"
+        {%- for month in var('months_list') %}
+        , ROUND( {{month}}_miles_driven ::NUMERIC, 2) AS "{{month}}"
+        {%- endfor %}
+        , RANK() OVER (PARTITION BY region ORDER BY {{month_str}}_miles_driven DESC) AS "Region Rank"
+        , RANK() OVER (PARTITION BY region ORDER BY {{prev_month_str}}_miles_driven DESC) AS "Prev Region Rank"
+    FROM combined_dd_and_eb
+)
+
+
 , event_pending_review_region_metrics AS (
     SELECT 
         "Region",
@@ -171,6 +191,8 @@ WITH safety_scores_metrics AS (
     SELECT * FROM events_per_vehicle_rank_region
     UNION ALL 
     SELECT * FROM safety_scores_rank_region
+    UNION ALL 
+    SELECT * FROM monthly_miles_driven
 )
 
 SELECT 
