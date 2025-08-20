@@ -39,13 +39,23 @@ WITH safety_scores_metrics AS (
         region AS "Region"
         , 'Miles Driven' AS "Metric"
         {%- for month in var('months_list') %}
-        , ROUND( {{month}}_miles_driven ::NUMERIC, 2) AS "{{month}}"
-        {%- endfor %}
-        , RANK() OVER (PARTITION BY region ORDER BY {{month_str}}_miles_driven DESC) AS "Region Rank"
-        , RANK() OVER (PARTITION BY region ORDER BY {{prev_month_str}}_miles_driven DESC) AS "Prev Region Rank"
+        , SUM( {{month}}_miles_driven) AS "{{month}}"
+        {%- endfor %}     
     FROM combined_dd_and_eb
+    GROUP BY region, "Metric"
 )
 
+, region_monthly_miles_driven AS (
+    SELECT
+        "Region"
+        , "Metric"
+        {%- for month in var('months_list') %}
+        , ROUND( "{{month}}" ::NUMERIC, 2) AS "{{month}}"
+        {%- endfor %}
+        , RANK() OVER (PARTITION BY "Region" ORDER BY "{{month_str}}" DESC) AS "Region Rank"
+        , RANK() OVER (PARTITION BY "Region" ORDER BY "{{prev_month_str}}" DESC) AS "Prev Region Rank"
+    FROM monthly_miles_driven
+)
 
 , event_pending_review_region_metrics AS (
     SELECT 
@@ -192,7 +202,7 @@ WITH safety_scores_metrics AS (
     UNION ALL 
     SELECT * FROM safety_scores_rank_region
     UNION ALL 
-    SELECT * FROM monthly_miles_driven
+    SELECT * FROM region_monthly_miles_driven
 )
 
 SELECT 
