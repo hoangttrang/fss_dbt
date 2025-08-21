@@ -15,9 +15,9 @@ display conda version_number
         - `C:\Users\UserName\anaconda3\Library\bin`
     
     - Or you can run the following cli in command line:
-env : Path+ =′′; C : \Users\UserName\anaconda3; C : \Users\UserName\anaconda3\Scripts; C : \Users\
-env:Path there should 3 the 3 above paths. - Initialize the hook between Anaconda and
-Powershell by running conda init powershell`
+    env : Path+ =′′; C : \Users\UserName\anaconda3; C : \Users\UserName\anaconda3\Scripts; C : \Users\ env: Path 
+        - there should be 3 above paths. 
+        - Initialize the hook between Anaconda and Powershell by running `conda init powershell`
     - Restart powershell by opening and closing terminal
     - Your set up is now ready, reopen powershell on the left you should see `(base) PS:C:\Users...`
 
