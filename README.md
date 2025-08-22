@@ -73,7 +73,7 @@ pytz==2022.7
 2. Create a Python virtual environment and update the scripts
 - Use `python -m venv your_env_name` 
 - This would download all the required package/libraries listed in the `requirements.txt`
-- Update activate file (Need to double check with Josh)
+- Update activate file (Need to double check)
     - Path to your virtual environment
     - Name of your virtual environment
     - ![activate Script](Setup/activate.png)
@@ -96,7 +96,7 @@ pytz==2022.7
 - In file called `.dbt/profiles.yml` You can check multiple connection points and add more database and schema
     - Your dbt profile would be located in your personal .dbt path that doesn't live in the same directory as you development.
     - Find where `profiles.yml` is stored.
-    - Copy the content from [Activate Sample Script](Setup/Activate_sample.ps1) into your Activate Windows Batch File (Activate.ps1) file
+    - Copy the content from [Activate Sample Script](Setup/Activate_sample.ps1) into your Activate Windows PowerShell Script (Activate.ps1)
     - Update Activate.ps1 for
         - Path to your profile.yml
         - Path to your git repo
