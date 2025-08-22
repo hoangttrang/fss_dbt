@@ -4,33 +4,34 @@ Welcome to your new dbt project!
 1. Conda
 - Download **Anaconda** from [here](https://www.anaconda.com/download/success) (We download Anaconda instead of conda)
 - env: Python 3.12
-- When you are done with downloading, check version by opening terminal `python --v`. It should
-display conda version_number
-- If not working or showing either, check the steps below:
-    - In order to link powershell with anaconda environment;
-    - You need the path that points to your anaconda, it would be something like this `C:\Users\UserName\anaconda3\`
-    - Open environment variables from your Windows and add these path above in - this step need help from IT to grant you access to edit environment path
-        - `C:\Users\UserName\anaconda3\`
-        - `C:\Users\UserName\anaconda3\Scripts`
-        - `C:\Users\UserName\anaconda3\Library\bin`
-    
-    - Or you can run the following cli in command line:
-    env : Path+ =′′; C : \Users\UserName\anaconda3; C : \Users\UserName\anaconda3\Scripts; C : \Users\ env: Path 
-        - there should be 3 above paths. 
-        - Initialize the hook between Anaconda and Powershell by running `conda init powershell`
+- Make sure PowerShell is properly initialized with Anaconda. 
+    - When you are done with downloading, check the version by opening **PowerShell** and running `python --version`. It should display the Python version associated with your conda environment.
+    - If not working or showing either, check the steps below:
+        - In order to link powershell with anaconda environment, you need to ensure the correct Anaconda paths are added, it would be something like this `C:\Users\UserName\anaconda3\`
+            - Method 1: Using System Environment Variables (Windows)
+                - Press **Windows + R**, type `sysdm.cpl`, and press **Enter**. (You may need admin access.)
+                - In the **System Properties** window, go to the **Advanced** tab and click **Environment Variables** at the bottom.
+                - Under **System variables**, edit the **Path** variable and add the following paths. 
+                    - `C:\Users\UserName\anaconda3\`
+                    - `C:\Users\UserName\anaconda3\Scripts`
+                    - `C:\Users\UserName\anaconda3\Library\bin`
+                    - ⚠️ If you don’t have permission, you’ll need IT support to grant access to edit system environment variables.
+            - Method 2: Using Command Line
+                - Open PowerShell and run the following command to add the paths `$env:Path += ";C:\Users\<UserName>\anaconda3 C:\Users\<UserName>\anaconda3\Scripts;C:\Users\<UserName>\anaconda3\Library\bin"`
+
+                - Initialize the connection between Anaconda and PowerShell by running `conda init powershell`
     - Restart powershell by opening and closing terminal
-    - Your set up is now ready, reopen powershell on the left you should see `(base) PS:C:\Users...`
+    - Your set up is now ready. Re-open PowerShell on the left and you should see `(base) PS:C:\Users...`
 
 2. git
 - [Git- Downloads](https://git-scm.com/downloads) 
 
 3. pip install
-- This installation would be included when you downloaded anaconda
+- This installation would be included when you downloaded anaconda.
 
 Notes:
-- You might need to in order to use pip install in powershell instead of using conda evn:
-    - open terminal. "Run As Administration"
-        `conda init powershell`
+- To use pip install in PowerShell instead of a conda environment, you may need to run PowerShell as an administrator.
+    - Open PowerShell as Administrator and run `conda init powershell`
 
 ## Create and activate a python env in conda
 - `conda create --name my_env`
@@ -45,7 +46,7 @@ After creating the environment, run:
 - `python -m pip install dbt-core dbt-postgres`
 
 Notes
-- For this dbt set up, we want to download dbt core. if you do pip install dbt it would lead you to dbt cloud cli
+- For this dbt set up, we want to download dbt core. If you do `pip install dbt`, it would lead you to dbt cloud cli.
 - [Additional resources](https://docs.getdbt.com/docs/core/pip-install) 
 
 ## DBT quick intro
@@ -53,13 +54,15 @@ Notes
 - profiles.yml : This is the place where dbt materializes the objects with the models and
 transformations defined in your project.
 - dbt_project.yml : where you initialize your project and how should they define your schema given
-productions
-- packages.yml : a library that already have predefine macro that you can use for testing
+productions.
+- packages.yml : a library that already have predefine macro that you can use for testing.
 
 
 ### DBT setup- initialize a project
 1. Create requirement.txt
-Create a folder for your DBT project. Inside that folder, create a file named `requirements.txt` and add the following contents:
+- Create a folder for your DBT project. 
+- Inside that folder, create a file named `requirements.txt`  
+- Add the following contents to the file:
 
 ```text
 dbt-core==1.3.0
@@ -69,12 +72,11 @@ pytz==2022.7
 
 2. Create a Python virtual environment and update the scripts
 - Use `python -m venv your_env_name` 
-- this would download all the required package/libraries listed in the `requirements.txt`
-- update activate file
+- This would download all the required package/libraries listed in the `requirements.txt`
+- Update activate file (Need to double check with Josh)
     - Path to your virtual environment
     - Name of your virtual environment
-
-![alt text](activate.png)
+    - ![activate Script](Setup/activate.png)
 
 
 3. Activate that env
@@ -92,12 +94,14 @@ pytz==2022.7
 - Run `dbt init`
 - This command initializes DBT and creates all the necessary folders for your DBT project. It will then prompt you for the information from Step 5—enter the required details when prompted.
 - In file called `.dbt/profiles.yml` You can check multiple connection points and add more database and schema
-    - Your dbt profile would be located in your personal .dbt path that doesn't live in the same directory as you development
-    - Find your dbt profile and update Activate.ps1 file for
+    - Your dbt profile would be located in your personal .dbt path that doesn't live in the same directory as you development.
+    - Find where `profiles.yml` is stored.
+    - Copy the content from [Activate Sample Script](Setup/Activate_sample.ps1) into your Activate Windows Batch File (Activate.ps1) file
+    - Update Activate.ps1 for
         - Path to your profile.yml
         - Path to your git repo
+        - ![Activate ps1 Script](Setup/activate_ps1.png)
 
-![alt text](activate_ps1.png)
 - Once you have everything setup; do this to check if your dbt setup is correct
     - `dbt debug` : this would test your connection
         - Make sure that your dbt debug is currently pointed at your desired `profiles.yml` and your `dbt_project.yml` file
