@@ -33,12 +33,8 @@ Notes:
 - To use pip install in PowerShell instead of a conda environment, you may need to run PowerShell as an administrator.
     - Open PowerShell as Administrator and run `conda init powershell`
 
-## Create and activate a python env in conda
-- `conda create --name my_env`
-- `conda create --name my_env python=3.8` : creates environment
-
-Notes
-- Make sure your Python version is ≤ 3.10
+## Create the python env in conda
+- `conda create --name my_env python=3.10` : creates environment
 
 ## Set up DBT
 After creating the environment, run:
@@ -70,14 +66,8 @@ dbt-postgres==1.3.0
 pytz==2022.7
 ```
 
-2. Create a Python virtual environment and update the scripts
+2. Create a Python virtual environment
 - Use `python -m venv your_env_name` 
-- This would download all the required package/libraries listed in the `requirements.txt`
-- Update activate file (Need to double check)
-    - Path to your virtual environment
-    - Name of your virtual environment
-    - ![activate Script](Setup/activate.png)
-
 
 3. Activate that env
 - On Window `\your_env_name\Scripts\Activate.ps1`
@@ -92,15 +82,17 @@ pytz==2022.7
 - Have all of the information below ready:
     - host, port, username, dbname, schema
 - Run `dbt init`
-- This command initializes DBT and creates all the necessary folders for your DBT project. It will then prompt you for the information from Step 5—enter the required details when prompted.
-- In file called `.dbt/profiles.yml` You can check multiple connection points and add more database and schema
-    - Your dbt profile would be located in your personal .dbt path that doesn't live in the same directory as you development.
-    - Find where `profiles.yml` is stored.
+- This command initializes DBT and creates all the necessary folders for your DBT project. It will then prompt you for the information from Step 5—enter the required details when prompted. If it doesn’t prompt automatically, you will need to locate `profiles.yml` and manually enter the required information.
+    - In this file called `.dbt/profiles.yml` You can check multiple connection points and add more database and schema
+        - Your dbt profile would be located in your personal .dbt path that doesn't live in the same directory as you development.
+        - Find where `profiles.yml` is stored.
+- Edit the Activate.ps1
     - Copy the content from [Activate Sample Script](Setup/Activate_sample.ps1) into your Activate Windows PowerShell Script (Activate.ps1)
-    - Update Activate.ps1 for
-        - Path to your profile.yml
-        - Path to your git repo
-        - ![Activate ps1 Script](Setup/activate_ps1.png)
+        - Update Activate.ps1 for
+            - Path to your profile.yml
+            - Path to your git repo
+            - ![Activate ps1 Script](Setup/activate_ps1.png)
+            - Path to your requirements.txt (if necessary)
 
 - Once you have everything setup; do this to check if your dbt setup is correct
     - `dbt debug` : this would test your connection
@@ -116,13 +108,7 @@ pytz==2022.7
 - Ensure you are in the Git repository folder
 - Run `dbt run --select +mbr_report`
 - Open PostgreSQL and verify whether new tables have been created in your schema
-
-### Personal = How to turn on DBT
-- Run `.\dbt_env\Scripts\activate_n_install.ps1` - activate the python env with install requirements package
-    - All of the environment setup for profiles.yml would located in Activate.ps1
-- Run the dependencies:
-    - `dbt deps`
-
+- ![dbt_test](Setup/dbt_test.png)
 
 ### Using the starter project
 
