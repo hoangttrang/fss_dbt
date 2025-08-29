@@ -28,7 +28,7 @@ FROM date_spine)
 , list_of_acct_department_date AS (
     SELECT
         *
-    FROM (SELECT DISTINCT acct_no, dept_no, class_id, dep_title, class_name
+    FROM (SELECT DISTINCT acct_no, dept_no, class_id, acct_title,  dep_title, class_name
         FROM sage_budget_item)
     CROSS JOIN (SELECT * FROM daily_date)
 )
@@ -50,6 +50,7 @@ FROM date_spine)
 
 SELECT 
     acct_no
+    , acct_title
     , dept_no
     , dep_title
     , class_id

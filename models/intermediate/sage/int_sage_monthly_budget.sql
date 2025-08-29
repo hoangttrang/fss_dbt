@@ -4,6 +4,7 @@ WITH gl_budget_item AS (
 
 SELECT 
     acct_no 
+    , acct_title
     , EXTRACT(YEAR FROM p_start_date) AS report_year
     , EXTRACT(MONTH FROM p_start_date) AS report_month
     , dept_no
@@ -17,6 +18,7 @@ FROM gl_budget_item
 WHERE acct_no IN (40001, 40010, 40097, 40099, 40100)
 GROUP BY 
     acct_no 
+    , acct_title
     , EXTRACT(YEAR FROM p_start_date)
     , EXTRACT(MONTH FROM p_start_date)
     , dept_no

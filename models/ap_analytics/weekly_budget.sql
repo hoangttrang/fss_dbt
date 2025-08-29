@@ -9,7 +9,7 @@ WITH date_map AS (
 , list_of_acct_department_date AS (
     SELECT
         *
-    FROM (SELECT DISTINCT acct_no, dept_no, class_id, dep_title, class_name
+    FROM (SELECT DISTINCT acct_no, dept_no, class_id, dep_title, acct_title, class_name
         FROM sage_budget_item)
     CROSS JOIN (SELECT * FROM date_map)
 )
@@ -48,6 +48,7 @@ WHERE budget_month1.total_amnt IS NOT NULL AND budget_month2.total_amnt IS NOT N
 , calculate_weekly_budget AS ( 
     SELECT 
        acct_no 
+       , acct_title
        , dept_no 
        , dep_title
        , class_id
