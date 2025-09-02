@@ -123,3 +123,25 @@ Try running the following commands:
 - Join the [chat](https://community.getdbt.com/) on Slack for live discussions and support
 - Find [dbt events](https://events.getdbt.com) near you
 - Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+
+
+## Useful Code: 
+To get staging, ideally, you would want the columns name and its corresponding data type. which allows for easier debugging inside of dbt 
+```
+
+SELECT string_agg(
+    'CAST(' || column_name || ' AS ' || data_type ||
+        CASE 
+            WHEN character_maximum_length IS NOT NULL 
+            THEN '(' || character_maximum_length || ')'
+            ELSE ''
+        END || 
+    ') AS ' || column_name,
+    E',\n'   -- add comma and newline between items
+    ORDER BY ordinal_position
+) AS cast_statements
+FROM information_schema.columns
+WHERE table_schema = 'sage_intacct'
+  AND table_name   = 'gl_budget_item';
+
+```

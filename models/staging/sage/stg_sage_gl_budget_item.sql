@@ -1,0 +1,43 @@
+WITH budget_item AS (
+    SELECT * FROM  {{ source ('sage', 'gl_budget_item') }}
+)
+
+SELECT 
+    CAST(recordno AS character varying(64)) AS record_no,
+    CAST(_fivetran_deleted AS boolean) AS _fivetran_deleted,
+    CAST(_fivetran_synced AS timestamp with time zone) AS _fivetran_synced,
+    CAST(periodkey AS bigint) AS period_key,
+    CAST(account_type AS character varying(256)) AS account_type,
+    CAST(pstartdate AS date) AS p_start_date,
+    CAST(deptitle AS character varying(256)) AS dep_title,
+    CAST(acct_no AS bigint) AS acct_no,
+    CAST(megaentityname AS character varying(256)) AS mega_entity_name,
+    CAST(dept_no AS character varying(256)) AS dept_no,
+    CAST(classdimkey AS bigint) AS class_dim_key,
+    CAST(reportingperiodname AS character varying(256)) AS reporting_period_name,
+    CAST(systemgenerated AS boolean) AS system_generated,
+    CAST(periodname AS character varying(256)) AS period_name,
+    CAST(locationkey AS bigint) AS location_key,
+    CAST(amount AS double precision) AS amount,
+    CAST(normalbalance AS bigint) AS normal_balance,
+    CAST(statistical AS boolean) AS statistical,
+    CAST(accountkey AS bigint) AS account_key,
+    CAST(megaentitykey AS bigint) AS mega_entity_key,
+    CAST(megaentityid AS character varying(256)) AS mega_entity_id,
+    CAST(classid AS bigint) AS class_id,
+    CAST(locationtitle AS character varying(256)) AS location_title,
+    CAST(record_url AS character varying(256)) AS record_url,
+    CAST(accttitle AS character varying(256)) AS acct_title,
+    CAST(classname AS character varying(256)) AS class_name,
+    CAST(deptkey AS bigint) AS dept_key,
+    CAST(budgetkey AS bigint) AS budget_key,
+    CAST(budgetid AS character varying(256)) AS budget_id,
+    CAST(location_no AS character varying(256)) AS location_no,
+    CAST(penddate AS date) AS pend_date,
+    CAST(modifiedbyloginid AS character varying(256)) AS modified_by_login_id,
+    CAST(createdbyloginid AS character varying(256)) AS created_by_login_id,
+    CAST(createdby AS bigint) AS created_by,
+    CAST(whencreated AS timestamp with time zone) AS when_created,
+    CAST(modifiedby AS bigint) AS modified_by,
+    CAST(whenmodified AS timestamp with time zone) AS when_modified
+FROM budget_item
