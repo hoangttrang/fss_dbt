@@ -30,5 +30,5 @@ models:
           combination_of_columns:
             - recordno
             - department_id
-  - name: gl_budget_item
+  - name: stg_sage_gl_budget_item
     description: This table stores the general ledger budget item information.This contains monthly budget amounts
