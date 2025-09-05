@@ -23,6 +23,8 @@ SELECT
     , r.title
     , r.status
     , r.created_date
+    , r.dc_registration_id
+    , r.dc_user_id
 	, u.first_name AS dc_first_name
     , u.last_name AS dc_last_name
     , u.username AS dc_username
