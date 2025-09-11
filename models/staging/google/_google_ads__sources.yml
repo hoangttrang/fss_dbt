@@ -16,3 +16,4 @@ sources:
       - name: keyword_stats
       - name: ad_group_criterion_history
       - name: search_term_keyword_stats
+      - name: search_term_stats

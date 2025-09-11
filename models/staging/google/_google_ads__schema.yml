@@ -19,4 +19,4 @@ models:
   - name: stg_ggl_ads_keyword_stats
   - name: stg_ggl_ads_ad_group_criterion_history
   - name: stg_ggl_ads_search_term_keyword_stats
-  
+  - name: stg_ggl_ads_search_term_stats
