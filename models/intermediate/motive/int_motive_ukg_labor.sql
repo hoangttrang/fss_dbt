@@ -12,7 +12,7 @@ WITH motive_ukg_mapping AS (
 , driving_period AS (
     SELECT * 
     , ROW_NUMBER() OVER (
-        PARTITION BY a.vehicle_id, a.start_date
+        PARTITION BY vehicle_id, start_date
         ORDER BY CASE WHEN driver_id IS NOT NULL THEN 1 ELSE 2 END
     ) AS row_num
     FROM {{ ref('stg_motive_data_driving_periods') }}
