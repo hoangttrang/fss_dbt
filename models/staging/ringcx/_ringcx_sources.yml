@@ -1,0 +1,10 @@
+version: 2 
+
+sources: 
+  - name: citus_ringCentral
+    database: citus
+    schema: ringcx
+    tables: 
+      - name: agent_voice_state
+      - name: agent_activity
+      - name: agent_login_time_tracking
