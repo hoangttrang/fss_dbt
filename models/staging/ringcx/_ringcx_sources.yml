@@ -6,6 +6,10 @@ sources:
     schema: ringcx
     tables: 
       - name: agent_voice_state
+        description: table that shows agent's full name, base state, pending disposition time, other agent state time and the total agent state time for voice agents.
       - name: agent_activity
+        description: table that shows agent activity details, such as interactions assigned, interactions handled, or rna. 
       - name: agent_login_time_tracking
+        description: table that shows agent login and logout time durations along with corresponding timestamps and state durations.
       - name: hourly_inbound_interaction_stats
+        description: table that shows the details of inbound interaction details per hour. 
