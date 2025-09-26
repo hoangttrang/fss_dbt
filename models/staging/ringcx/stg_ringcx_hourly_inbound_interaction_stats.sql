@@ -1,4 +1,4 @@
-WITH agent_login_time_tracking AS (
+WITH hourly_inbound_interaction_stats AS (
     SELECT * FROM  {{ source ('ringcx', 'hourly_inbound_interaction_stats')}}
 ) 
 
@@ -29,4 +29,4 @@ SELECT
     CAST(queue_interaction_service_level AS double precision) AS queue_interaction_service_level,
     CAST(updated_at AS timestamp without time zone) AS updated_at,
     CAST(id AS bigint) AS id
-FROM agent_login_time_tracking
+FROM hourly_inbound_interaction_stats
