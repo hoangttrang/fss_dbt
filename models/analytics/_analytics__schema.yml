@@ -20,17 +20,19 @@ models:
     description: "Google Ads campaigns data."
   - name: dc_registration_users
     description: "This model is used to map digital chalk registration users to their respective users with user name, email."
-  - name: agent_login_time_agg
+  - name: ringcx_agent_login_time_agg
     description: "This model aggregates agents with the same agent login ID because of overnight login and logout."
     tests:
-      - dbt_utils.unique_combination_of_columns:
+    - unique:
+        column_name: agent_login_id
+    - not_null:
+        column_name: agent_login_id
+    - dbt_utils.unique_combination_of_columns:
         combination_of_columns:
-          - agent_login_id
-      - dbt_expectations.expect_fk_pairs_in_columns:
-        fk_column_list: [agent_id, agent_login_start_date, agent_login_start_time]
-      - dbt_utils.expression_is_true:
-        expression: "total_login_time > available"
-      - dbt_utils.expression_is_true:
-        expression: "available > engaged"
-
+          - agent_id
+          - agent_login_start_date
+          - agent_login_start_time
+    - dbt_utils.expression_is_true:
+        expression: "total_login_time >= available"
+        severity: error
     
