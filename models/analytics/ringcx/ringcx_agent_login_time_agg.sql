@@ -33,6 +33,7 @@ SELECT
     SUM(working) AS working
     
 FROM agent_login_time_tracking
+WHERE total_login_time <> 0
 GROUP BY 
     agent_full_name, 
     agent_id, 
