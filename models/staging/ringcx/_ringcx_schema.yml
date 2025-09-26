@@ -3,16 +3,10 @@ version: 2
 # This is used for documentation and tests. 
 models: 
   - name: stg_ringcx_agent_activity
-    data_tests:
-      - dbt_utils.unique_combination_of_columns: 
-          combination_of_columns:
-            - event_id 
-            - vehicle_id 
-            - driver_id 
   - name: stg_ringcx_agent_login_time_tracking
   - name: stg_ringcx_hourly_inbound_interaction_stats
   - name: stg_ringcx_agent_voice_state
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns: 
           combination_of_columns:
             - agent_group_id 
