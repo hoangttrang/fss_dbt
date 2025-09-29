@@ -4,7 +4,7 @@ version: 2
 models: 
   - name: stg_sage_ap_bill
     description: This table stores invoice per vendor with the most up-to-date information. It tracks if an invoice is deleted. doesn't track invoice status changes
-    data_tests:
+    tests:
       - dbt_utils.unique_combination_of_columns: 
           combination_of_columns:
             - invoice_num 
@@ -16,7 +16,7 @@ models:
     columns: 
       - name: state
         description: State of the invoice. V= voided- refund , S = submitted, U = unapproved, usually associated with Declined status, D= Deleted, A = Approved 
-    data_tests: 
+    tests: 
       - dbt_utils.unique_combination_of_columns: 
           combination_of_columns:
             - record_num
@@ -25,10 +25,10 @@ models:
             - line_no
   - name: stg_sage_gl_detail
     description: This table stores the general ledger detail information. It tracks if a record is deleted. It doesn't track status changes.
-    data_tests:
+    tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - recordno
-            - department_id
+            - departmentid
   - name: gl_budget_item
     description: This table stores the general ledger budget item information.This contains monthly budget amounts
