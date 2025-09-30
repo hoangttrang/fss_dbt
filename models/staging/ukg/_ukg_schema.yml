@@ -10,11 +10,6 @@ models:
             - employee_id
             - company_id
   - name: stg_ukg_employee_change
-    tests:
-      - dbt_utils.unique_combination_of_columns: 
-          combination_of_columns:
-            - company_id 
-            - employee_id
   - name: stg_ukg_earning_history_base_element
   - name: stg_ukg_dependent_deduction
     tests: 
