@@ -20,3 +20,5 @@ sources:
           error_after: {count: 2, period: day}
       - name: safety_score_weights
       - name: consolidated_sites
+      - name: motive_ukg_mapping 
+      - name: data_idle_events
