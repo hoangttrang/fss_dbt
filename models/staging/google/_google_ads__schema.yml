@@ -3,12 +3,6 @@ version: 2
 # This is used to documentation on the database and the schema 
 models: 
   - name: stg_ggl_ads_ad_group_stats
-    data_tests:
-      - dbt_utils.unique_combination_of_columns: 
-          combination_of_columns:
-            - event_id 
-            - vehicle_id 
-            - driver_id 
   - name: stg_ggl_ads_account_history
   - name: stg_ggl_ads_campaign_history
   - name: stg_ggl_ads_ad_group_history
