@@ -12,11 +12,25 @@ models:
           column_name: employee_id
       - not_null:
           column_name: employee_id
-      - not_null:
-          column_name: site_description
   - name: ukg_weekly_payment_salary
   - name: ukg_hourly_salary_spend
   - name: ggl_ads_campaign_report
     description: "Google Ads campaigns data."
   - name: dc_registration_users
     description: "This model is used to map digital chalk registration users to their respective users with user name, email."
+  - name: ringcx_agent_login_time_agg
+    description: "This model aggregates agents with the same agent login ID because of overnight login and logout."
+    tests:
+    - unique:
+        column_name: agent_login_id
+    - not_null:
+        column_name: agent_login_id
+    - dbt_utils.unique_combination_of_columns:
+        combination_of_columns:
+          - agent_id
+          - agent_login_start_date
+          - agent_login_start_time
+    - dbt_utils.expression_is_true:
+        expression: "total_login_time >= available"
+        severity: error
+    

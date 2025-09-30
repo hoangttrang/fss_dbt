@@ -26,7 +26,7 @@ WITH dependent_deduction AS (
     SELECT 
         t1.employee_id,
         t1.employment_id,
-        t1.annual_salary AS latest_annual_salary,
+        MAX(t1.annual_salary) AS latest_annual_salary,
         t1.pay_date AS latest_pay_date
     FROM pay_register t1
     INNER JOIN (
@@ -40,6 +40,10 @@ WITH dependent_deduction AS (
     ) t2 ON t1.employee_id = t2.employee_id 
         AND t1.pay_date = t2.pay_date
         AND t1.employment_id = t2.employment_id
+    GROUP BY 
+        t1.employee_id,
+        t1.employment_id,
+        t1.pay_date
 )
 
 
@@ -105,6 +109,7 @@ LEFT JOIN active_employee ae -- join on employee_id/id
     ON e.id = ae.id
 ) 
 
-SELECT * 
+SELECT 
+    DISTINCT * 
 FROM final_table
 WHERE first_name != 'Test' and last_name != 'Employee'
