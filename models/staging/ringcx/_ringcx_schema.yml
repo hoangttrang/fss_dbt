@@ -1,0 +1,16 @@
+version: 2
+
+# This is used for documentation and tests. 
+models: 
+  - name: stg_ringcx_agent_activity
+  - name: stg_ringcx_agent_login_time_tracking
+  - name: stg_ringcx_hourly_inbound_interaction_stats
+  - name: stg_ringcx_agent_voice_state
+    data_tests:
+      - dbt_utils.unique_combination_of_columns: 
+          combination_of_columns:
+            - agent_group_id 
+            - agent_id 
+            - date 
+            - base_state
+  
