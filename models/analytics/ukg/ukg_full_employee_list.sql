@@ -74,6 +74,9 @@ WITH dependent_deduction AS (
     em.original_hire_date,
     em.hire_source, 
     em.job_description,
+    em.term_type,
+    em.term_reason,
+    em.termination_reason_description,
     j.id AS job_id,
     j.job_family_code
     , COALESCE(d.is_dental, 0) AS is_dental
