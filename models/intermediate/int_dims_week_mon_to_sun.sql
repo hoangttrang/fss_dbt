@@ -5,6 +5,7 @@
 This table generates the weekly boundaries for a date spine that it is suitable for Financial Reporting, especially in this case it use to 
 break down Monthly Budget into weekly Budget 
 
+Each week starts on Monday and ends on Sunday   
 */
 WITH date_spine AS (
 
@@ -12,7 +13,7 @@ WITH date_spine AS (
     SELECT
         date_day::DATE AS date_day
     FROM generate_series(
-        '2023-12-30'::DATE,               
+        '2021-01-01'::DATE,
         current_date + interval '1 year', 
         interval '1 day'
     ) AS t(date_day)
