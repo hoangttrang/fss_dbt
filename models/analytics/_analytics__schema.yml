@@ -26,11 +26,14 @@ models:
     - not_null:
         column_name: agent_login_id
     - dbt_utils.unique_combination_of_columns:
-        combination_of_columns:
-          - agent_id
-          - agent_login_start_date
-          - agent_login_start_time
+        arguments:
+          combination_of_columns:
+            - agent_id
+            - agent_login_start_date
+            - agent_login_start_time
     - dbt_utils.expression_is_true:
-        expression: "total_login_time >= available"
-        severity: error
+        arguments:
+          expression: "total_login_time >= available"
+        config:
+          severity: error
     
