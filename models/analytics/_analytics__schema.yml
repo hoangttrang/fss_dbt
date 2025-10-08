@@ -14,6 +14,8 @@ models:
           column_name: employee_id
   - name: ukg_weekly_payment_salary
   - name: ukg_hourly_salary_spend
+  - name: ukg_utc_local_time_convert
+    description: "This model converts start and end time in UTC into local time based on employee's timezone."
   - name: ggl_ads_campaign_report
     description: "Google Ads campaigns data."
   - name: dc_registration_users
