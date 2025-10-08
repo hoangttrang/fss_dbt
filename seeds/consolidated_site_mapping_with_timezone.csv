@@ -1,93 +1,149 @@
-ukg_location_id,motive_group_id,motive_group_name,consolidated_site,region_old,region,Super Region ,Latitude,Longitude,timezone
-FAYE,55543,AR - Fay,AR - Fay,West,Gulf South,West,36.042659,-94.150036,America/Chicago
-LLROCK,55542,AR - Little Rock,AR - Little Rock,West,Gulf South,West,34.768452,-92.277291,America/Chicago
-TUC,162497,AZ - Stamback - VIP Trailers,AZ - Stamback,West,West,West,32.08911,-110.957,America/Phoenix
-TUC,162377,AZ - Stamback Admin,AZ - Stamback,West,West,West,32.08911,-110.957,America/Phoenix
-TUC,162372,AZ - Stamback Rolloffs,AZ - Stamback,West,West,West,32.08911,-110.957,America/Phoenix
-TUC,161452,AZ - Stamback Septic,AZ - Stamback,West,West,West,32.08911,-110.957,America/Phoenix
-TUC,162375,AZ - Stamback Toilets,AZ - Stamback,West,West,West,32.08911,-110.957,America/Phoenix
-FTPRC,60498,FL - Freedom,FL - Freedom,Southeast,South Central,East,27.21931,-80.24,America/New_York
-GAINES,134638,FL - Gainsville Porta Serve,FL - Gainesville Porta Serve,Southeast,South Central,East,29.65622,-82.6107,America/New_York
-NAP,110782,FL - JW Craft,FL - West Florida,Southeast,South Central,East,26.16146,-81.7565,America/New_York
-FTMY,101637,FL - Premier & Prestigious,FL - West Florida,Southeast,South Central,East,26.66856,-81.803,America/New_York
-CLTN,102953,GA - GCI,GA - GCI,Southeast,South Central,East,33.63221,-85.1094,America/New_York
-AGSTA,53751,GA -PSI Augusta,GA/SC - PSI,Southeast,Southeast,East,33.45108,-81.9871,America/New_York
-CR,138855,IA - Cedar Rapids,IA - Cedar Rapids,North,North,East,41.92066,-91.6735,America/Chicago
-KER,117031,KERMIT,TX - Forza,West,West,West,31.86069,-103.096,America/Chicago
-LCNM,117031,KERMIT,TX - Forza,West,West,West,32.38957788,-106.805273,America/Denver
-KER,119589,Kermit HD,TX - Forza,West,West,West,31.86069,-103.096,America/Chicago
-MID,119589,Kermit HD,TX - Forza,West,West,West,31.96708,-101.983,America/Chicago
-SHEPD,54016,KY - Bullitt Sep. Service,KY - Bullitt Sep. Service,Central,North,East,37.98081,-85.7259,America/New_York
-LEX2,100868,KY - Lex,KY - Lex,Central,North,East,37.941486,-84.55274,America/New_York
-LOUIS1,171121,KY - Moon,KY - Moon,Central,North,East,38.21101,-85.8044,America/New_York
-LOUIS1,54014,KY - Moon leasing,KY - Moon,Central,North,East,38.21101,-85.8044,America/New_York
-LOUIS1,54015,KY - Moon Minis,KY - Moon,Central,North,East,38.21101,-85.8044,America/New_York
-LOUIS1,54013,KY - moon portables,KY - Moon,Central,North,East,38.21101,-85.8044,America/New_York
-LAF,171500,LA - Event Solutions,LA - Event Solutions,Gulf South,Gulf South,West,30.242094,-92.050418,America/Chicago
-LAF,171501,LA - Event Solutions - LAF,LA - Event Solutions,Gulf South,Gulf South,West,30.242094,-92.050418,America/Chicago
-LAF,171804,LA - Event Solutions - Leesville,LA - Event Solutions,Gulf South,Gulf South,West,30.242094,-92.050418,America/Chicago
-LAF,171502,LA - Event Solutions - Sulphur,LA - Event Solutions,Gulf South,Gulf South,West,30.242094,-92.050418,America/Chicago
-PEC,171503,TX - Event Solutions Vehicles - Pecos,LA - Event Solutions,Gulf South,Gulf South,West,31.35934515,-103.60201,America/Chicago
-LAF,171501,LA - Event Solutions - LAF (ES),LA - Event Solutions,Gulf South,Gulf South,West,30.242094,-92.050418,America/Chicago
-LAF,174044,LA - Event Solutions - LAF (PC),LA - Event Solutions,Gulf South,Gulf South,West,30.242094,-92.050418,America/Chicago
-LCNM,117773,Las Cruces,TX - Forza,West,West,West,32.38959,-106.80523,America/Denver
-LUB,117030,LUBBOCK,TX - Forza,West,West,West,33.527814,-101.868328,America/Chicago
-LUB,119588,Lubbock HD ,TX - Forza,West,West,West,33.527814,-101.868328,America/Chicago
-KER,117032,MIDLAND ,TX - Forza,West,West,West,31.967084,-101.983375,America/Chicago
-MID,117032,MIDLAND ,TX - Forza,West,West,West,31.967084,-101.983375,America/Chicago
-MID,119590,Midland HD,TX - Forza,West,West,West,31.967084,-101.983375,America/Chicago
-TUP,151195,MS - American Johnny,MS - American Johnny,West,Gulf South,West,34.36353,-88.6864,America/Chicago
-JACKS,119580,MS - Gotta Go,MS - Gotta Go,West,Gulf South,West,32.48843,-90.2924,America/Chicago
-CLT,55552,NC -  ASC,NC - ASC,Southeast,Southeast,East,35.67466322,-80.58563424,America/New_York
-SAL,55551,NC - ASC - Salisbury,NC - ASC,Southeast,Southeast,East,35.67466322,-80.58563424,America/New_York
-CLT,55550,NC - Denver,NC - ASC,Southeast,Southeast,East,35.524,-80.9807,America/New_York
-CLT,55551,NC - Greensboro,NC - ASC,Southeast,Southeast,East,36.12368,-79.7461,America/New_York
-GSO,55551,NC - Greensboro,NC - ASC,Southeast,Southeast,East,36.12368,-79.7461,America/New_York
-ASHE,68660,NC - Griffin Hook trucks,NC - Griffin,Central,Southeast,East,35.63133,-82.6194,America/New_York
-ASHE,53753,NC - Griffin Waste Pump Trucks,NC - Griffin,Central,Southeast,East,35.63133,-82.6194,America/New_York
-WLDN,96455,NY - A - 1 Portable Toilets,NY - A - John,North,North,East,41.55835,-74.1619,America/New_York
-WLDN,96457,NY - A - John,NY - A - John,North,North,East,41.55835,-74.1619,America/New_York
-TOL,76130,OH - C&L and Safeway,OH - C&L and Safeway,North,North,East,41.55166,-83.5575,America/New_York
-COLOH,50049,OH - Rent - A - John,OH - Rent - A - John,North,North,East,39.8712,-82.9679,America/New_York
-MALVPA,99738,PA - Malvern,PA - Port A Bowl,North,North,East,40.38123,-75.145335,America/New_York
-PHILLY,99738,PA - Malvern,PA - Port A Bowl,North,North,East,40.38123,-75.145335,America/New_York
-PHILLY,50046,PA - Port A Bowl,PA - Port A Bowl,North,North,East,40.38123,-75.1453,America/New_York
-SANG,117033,SAN ANGELO- TOPS SEPTIC,TX - Forza,West,West,West,31.398701,-100.3844621,America/Chicago
-GSC,137745,SC - Littlejohn,SC - Littlejohn,Southeast,Southeast,East,34.84857,-82.4029,America/New_York
-COLSC,54012,SC - PSI Columbia,GA/SC - PSI,Southeast,Southeast,East,34.113987,-80.967376,America/New_York
-MID,117035,SEMINOLE,TX - Forza,West,West,West,32.712732,-102.643441,America/Chicago
-SEM,117035,SEMINOLE,TX - Forza,West,West,West,32.712732,-102.643441,America/Chicago
-CHATT,123039,TN - Chattanooga -Bolles,TN - Chattanooga - Bolles,Central,South Central,East,35.039867,-85.194757,America/New_York
-CROSS,55431,TN - ETP,TN - ETP ,Central,Southeast,East,35.99174,-85.0264,America/Chicago
-KNOX,55431,TN - ETP,TN - ETP ,Central,Southeast,East,36.04281,-83.8244,America/New_York
-CLARK,55429,TN - FusionSite (Clark),TN - Nashville,Central,Southeast,East,36.13829,-86.752148,America/Chicago
-NASH,55429,TN - FusionSite (Clark),TN - Nashville,Central,Southeast,East,36.13829,-86.752148,America/Chicago
-NASH,55428,TN - FusionSite (Nashville),TN - Nashville,Central,Southeast,East,36.13829,-86.752148,America/Chicago
-NASH,123038,TN - FusionSite (Woodycrest),TN - Nashville,Central,Southeast,East,36.13829,-86.752148,America/Chicago
-GAL,155533,TN - Maxwell Septic,TN - Maxwell,Central,Southeast,East,36.38041,-86.4633,America/Chicago
-GREEN,60569,TN - MC Septic,TN - MC Septic,Central,Southeast,East,36.17366,-82.8565,America/New_York
-MEM,63332,TN - Memphis - Safety Quip,TN - Memphis - Safety Quip,West,Gulf South,West,35.01387,-89.9365,America/Chicago
-HAR,119083,TX - ACP,TX - ACP,West,West,West,26.200354,-97.719826,America/Chicago
-LAR,119083,TX - ACP,TX - ACP,West,West,West,27.496295,-99.453422,America/Chicago
-SAT,119083,TX - ACP,TX - ACP,West,West,West,27.496295,-99.453422,America/Chicago
-LCNM,146102,TX - Forza,TX - Forza,West,West,West,32.38957788,-106.805273,America/Denver
-LUB,146102,TX - Forza,TX - Forza,West,West,West,33.527814,-101.868328,America/Chicago
-BURN,150933,TX - J Bar,TX - J Bar,West,West,West,30.74042,-98.2341,America/Chicago
-WYTHE,130474,VA - R&R,VA - R&R,Southeast,Southeast,East,39.82726,-84.1241,America/New_York
-MAD,110783,WI - Buckys,WI - Buckys,North,North,East,42.973084,-89.371609,America/Chicago
-UNMCH,162868,WI - Cesspool,WI - Cesspool,North,North,East,44.88973,-91.43236,America/Chicago
-UNMCH,168608,WI - Cesspool - Trailers,WI - Cesspool,North,North,East,44.88973,-91.43236,America/Chicago
-LODI,120444,WI - Stranders,WI - Stranders,North,North,East,43.367495,-89.519295,America/Chicago
-UNMCH,181843,Sarabia's Trailers,TX - Sarabia's,West,West,West,31.77285,-106.41613,America/Denver
-UNMCH,181840,TX - Sarabia's,TX - Sarabia's,West,West,West,31.77285,-106.41613,America/Denver
-UNMCH,186110,AZ - Rent A Can,AZ - Rent A Can,West,West,West,32.88666352,-111.786237,America/Phoenix
-UNMCH,188872,AZ - Rent A Can - Trailers,AZ - Rent A Can,West,West,West,32.88666352,-111.786237,America/Phoenix
-UNMCH,188871,AZ - Rent A Can - Vehicles,AZ - Rent A Can,West,West,West,32.88666352,-111.786237,America/Phoenix
-UNMCH,205103,CA - Pacific Portable Services,CA - Pacific Portable Services,West,West,West,33.805018,-117.8652931,America/Los_Angeles
-UNMCH,205105,CA - Pacific Portable Services - Pump Trucks,CA - Pacific Portable Services,West,West,West,33.805018,-117.8652931,America/Los_Angeles
-UNMCH,205104,CA - Pacific Portable Services - Fence Trucks,CA - Pacific Portable Services,West,West,West,33.805018,-117.8652931,America/Los_Angeles
-UNMCH,205106,CA - Pacific Portable Services - Trailers,CA - Pacific Portable Services,West,West,West,33.805018,-117.8652931,America/Los_Angeles
-UNMCH,208880,CO - Colorado Portables - Pump Trucks,CO - Colorado Portables,West,West,West,40.09266,-104.81612,America/Denver
-UNMCH,208879,CO - Colorado Portables - Pick Up Trucks,CO - Colorado Portables,West,West,West,40.09266,-104.81612,America/Denver
-UNMCH,208878,CO - Colorado Portables,CO - Colorado Portables,West,West,West,40.09266,-104.81612,America/Denver
-UNMCH,208882,CO - Colorado Portables - Restroom Trailers,CO - Colorado Portables,West,West,West,40.09266,-104.81612,America/Denver
+id,ukg_location_id,motive_group_id,motive_group_name,consolidated_site,region,super_region,sage_department_id,timezone
+160,UNMCH,181843,Sarabia's Trailers,TX - Sarabia's,West,,,America/Denver
+161,UNMCH,181840,TX - Sarabia's,TX - Sarabia's,West,,,America/Denver
+162,UNMCH,186110,AZ - Rent A Can,AZ - Rent A Can,West,,,America/Phoenix
+163,UNMCH,188872,AZ - Rent A Can - Trailers,AZ - Rent A Can,West,,,America/Phoenix
+164,UNMCH,188871,AZ - Rent A Can - Vehicles,AZ - Rent A Can,West,,,America/Phoenix
+170,LAF,171500,LA - Event Solutions,LA - Event Solutions,Gulf South,,,America/Chicago
+172,LAF,171804,LA - Event Solutions - Leesville,LA - Event Solutions,Gulf South,,,America/Chicago
+173,LAF,171502,LA - Event Solutions - Sulphur,LA - Event Solutions,Gulf South,,,America/Chicago
+174,PEC,171503,TX - Event Solutions Vehicles - Pecos,LA - Event Solutions,Gulf South,,,America/Chicago
+175,LAF,174044,LA - Event Solutions - LAF (PC),LA - Event Solutions,Gulf South,,,America/Chicago
+176,LCNM,117773,Las Cruces,TX - Forza,West,,,America/Denver
+224,NEWAL,263175,IN - A1 Porta Potty,IN - A1 Porta Potty,North,East,1041,America/New_York
+188,ORANGE,205103,CA - Pacific Portable Services,CA - Pacific Portable Services,West,West,1039,America/Los_Angeles
+189,ORANGE,205104,CA - Pacific Portable Services - Fence Trucks,CA - Pacific Portable Services,West,West,1039,America/Los_Angeles
+190,ORANGE,205105,CA - Pacific Portable Services - Pump Trucks,CA - Pacific Portable Services,West,West,1039,America/Los_Angeles
+191,ORANGE,205106,CA - Pacific Portable Services - Trailers,CA - Pacific Portable Services,West,West,1039,America/Los_Angeles
+192,DENVER,208878,CO - Colorado Portables,CO - Colorado Portables,West,West,1040,America/Denver
+193,DENVER,208879,CO - Colorado Portables - Pick Up Trucks,CO - Colorado Portables,West,West,1040,America/Denver
+194,DENVER,208880,CO - Colorado Portables - Pump Trucks,CO - Colorado Portables,West,West,1040,America/Denver
+195,DENVER,208882,CO - Colorado Portables - Restroom Trailers,CO - Colorado Portables,West,West,1040,America/Denver
+225,NEWAL,263186,IN - A1 Porta Potty - Admin / Maint Trucks,IN - A1 Porta Potty,North,East,1041,America/New_York
+226,NEWAL,263183,IN - A1 Porta Potty - Fence Trucks,IN - A1 Porta Potty,North,East,1041,America/New_York
+227,NEWAL,263182,IN - A1 Porta Potty - Pump Trucks,IN - A1 Porta Potty,North,East,1041,America/New_York
+228,NEWAL,263185,IN - A1 Porta Potty - Roll Off Trucks,IN - A1 Porta Potty,North,East,1041,America/New_York
+229,NEWAL,263188,IN - A1 Porta Potty - Sweep Trucks,IN - A1 Porta Potty,North,East,1041,America/New_York
+230,NEWAL,263189,IN - A1 Porta Potty -  Restroom Trailers,IN - A1 Porta Potty,North,East,1041,America/New_York
+196,ESOL,171500,LA - Event Solutions,LA - Event Solutions,Gulf South,West,1035,America/Chicago
+198,ESOL,171502,LA - Event Solutions - Sulphur,LA - Event Solutions,Gulf South,East,1035,America/Chicago
+199,ESOL,171804,LA - Event Solutions - Leesville,LA - Event Solutions,Gulf South,East,1036,America/Chicago
+181,UNMCH,208880,CO - Colorado Portables - Pump Trucks,CO - Colorado Portables,West,,,America/Denver
+182,UNMCH,208879,CO - Colorado Portables - Pick Up Trucks,CO - Colorado Portables,West,,,America/Denver
+183,UNMCH,208878,CO - Colorado Portables,CO - Colorado Portables,West,,,America/Denver
+184,UNMCH,208882,CO - Colorado Portables - Restroom Trailers,CO - Colorado Portables,West,,,America/Denver
+177,UNMCH,205103,CA - Pacific Portable Services,CA - Pacific Portable Services,West,,,America/Los_Angeles
+178,UNMCH,205105,CA - Pacific Portable Services - Pump Trucks,CA - Pacific Portable Services,West,,,America/Los_Angeles
+179,UNMCH,205104,CA - Pacific Portable Services - Fence Trucks,CA - Pacific Portable Services,West,,,America/Los_Angeles
+180,UNMCH,205106,CA - Pacific Portable Services - Trailers,CA - Pacific Portable Services,West,,,America/Los_Angeles
+185,CASA,186110,AZ - Rent A Can,AZ - Rent A Can,West,West,1038,America/Phoenix
+171,LAF,171501,LA - Event Solutions - LAF (ES),LA - Event Solutions,Gulf South,,,America/Chicago
+186,CASA,188871,AZ - Rent A Can - Vehicles,AZ - Rent A Can,West,West,1038,America/Phoenix
+187,CASA,188872,AZ - Rent A Can - Trailers,AZ - Rent A Can,West,West,1038,America/Phoenix
+200,ESOL,174044,LA - Event Solutions - LAF (PC),LA - Event Solutions,Gulf South,East,1036,America/Chicago
+201,ESOLTX,171503,TX - Event Solutions Vehicles - Pecos,LA - Event Solutions,Gulf South,East,1036,America/Chicago
+202,NEWAL,96455,NY - A - 1 Portable Toilets,NY - A - John,North,West,1016,America/New_York
+85,UNMCH,162497,AZ - Stamback - VIP Trailers,AZ - Stamback,West,,,America/Phoenix
+86,UNMCH,162377,AZ - Stamback Admin,AZ - Stamback,West,,,America/Phoenix
+203,WLDNNY,96457,NY - A - John,NY - A - John,North,West,1016,America/New_York
+204,OHIO,50049,OH - Rent - A - John,OH - Rent - A - John,North,West,1010,America/New_York
+87,UNMCH,162372,AZ - Stamback Rolloffs,AZ - Stamback,West,,,America/Phoenix
+88,UNMCH,161452,AZ - Stamback Septic,AZ - Stamback,West,,,America/Phoenix
+89,UNMCH,162375,AZ - Stamback Toilets,AZ - Stamback,West,,,America/Phoenix
+97,KER,117031,KERMIT,TX - Forza,West,,,America/Chicago
+98,LCNM,117031,KERMIT,TX - Forza,West,,,America/Denver
+99,KER,119589,Kermit HD,TX - Forza,West,,,America/Chicago
+100,MID,119589,Kermit HD,TX - Forza,West,,,America/Chicago
+107,UNMCH,171500,LA - Event Solutions,LA - Event Solutions,Gulf South,,,America/Chicago
+108,UNMCH,171501,LA - Event Solutions - LAF,LA - Event Solutions,Gulf South,,,America/Chicago
+109,UNMCH,171804,LA - Event Solutions - Leesville,LA - Event Solutions,Gulf South,,,America/Chicago
+110,UNMCH,171502,LA - Event Solutions - Sulphur,LA - Event Solutions,Gulf South,,,America/Chicago
+111,UNMCH,117773,Las Cruces,TX - Forza,West,,,America/Chicago
+112,LUB,117030,LUBBOCK,TX - Forza,West,,,America/Chicago
+113,LUB,119588,Lubbock HD,TX - Forza,West,,,America/Chicago
+114,KER,117032,MIDLAND,TX - Forza,West,,,America/Chicago
+115,MID,117032,MIDLAND,TX - Forza,West,,,America/Chicago
+116,MID,119590,Midland HD,TX - Forza,West,,,America/Chicago
+122,CLT,55551,NC - Greensboro,NC - ASC,Southeast,,,America/New_York
+126,WLDN,96455,NY - A - 1 Portable Toilets,NY - A - John,North,,,America/New_York
+127,WLDN,96457,NY - A - John,NY - A - John,North,,,America/New_York
+129,COLOH,50049,OH - Rent - A - John,OH - Rent - A - John,North,,,America/New_York
+130,MALVPA,99738,PA - Malvern,PA - Port A Bowl,North,,,America/New_York
+133,SANG,117033,SAN ANGELO- TOPS SEPTIC,TX - Forza,West,,,America/Chicago
+136,MID,117035,SEMINOLE,TX - Forza,West,,,America/Chicago
+137,SEM,117035,SEMINOLE,TX - Forza,West,,,America/Chicago
+151,UNMCH,171503,TX - Event Solutions - Pecos,LA - Event Solutions,Gulf South,,,America/Chicago
+152,LCNM,146102,TX - Forza,TX - Forza,West,,,America/Denver
+153,LUB,146102,TX - Forza,TX - Forza,West,,,America/Chicago
+154,BURN,150933,TX - J Bar,TX - J Bar,West,,,America/Chicago
+157,UNMCH,162868,WI - Cesspool,WI - Cesspool,North,,,America/Chicago
+158,UNMCH,168608,WI - Cesspool - Trailers,WI - Cesspool,North,,,America/Chicago
+144,NASH,123038,TN - FusionSite (Woodycrest),TN - Nashville,Southeast,,,America/Chicago
+145,GAL,155533,TN - Maxwell Septic,TN - Maxwell,Southeast,,,America/Chicago
+205,MAX,155533,TN - Maxwell Septic,TN - Maxwell,Southeast,East,1032,America/Chicago
+206,NASH1,123038,TN - FusionSite (Woodycrest),TN - Nashville,Southeast,West,1013,America/Chicago
+207,FORZ,117030,LUBBOCK,TX - Forza,West,West,1030,America/Chicago
+208,FORZ,117031,KERMIT,TX - Forza,West,West,1030,America/Chicago
+210,FORZ,117033,SAN ANGELO- TOPS SEPTIC,TX - Forza,West,East,1030,America/Chicago
+211,FORZ,117035,SEMINOLE,TX - Forza,West,East,1030,America/Chicago
+212,FORZ,117773,Las Cruces,TX - Forza,West,East,1030,America/Chicago
+213,FORZ,119588,Lubbock HD,TX - Forza,West,East,1030,America/Chicago
+214,FORZ,119589,Kermit HD,TX - Forza,West,East,1030,America/Chicago
+215,FORZ,119590,Midland HD,TX - Forza,West,East,1030,America/Chicago
+216,FORZ,146102,TX - Forza,TX - Forza,West,East,1030,America/Chicago
+217,JBAR,150933,TX - J Bar,TX - J Bar,West,East,1031,America/Chicago
+218,ELPA,181840,TX - Sarabia's,TX - Sarabia's,West,West,1037,America/Denver
+219,ELPA,181843,Sarabia's Trailers,TX - Sarabia's,West,West,1037,America/Denver
+220,CHIP,162868,WI - Cesspool,WI - Cesspool,North,West,1034,America/Chicago
+221,CHIP,168608,WI - Cesspool - Trailers,WI - Cesspool,North,West,1034,America/Chicago
+83,FAYE,55543,AR - Fay,AR - Fay,Gulf South,West,1002,America/Chicago
+84,LLROCK,55542,AR - Little Rock,AR - Little Rock,Gulf South,West,1001,America/Chicago
+168,TUC,161452,AZ - Stamback Septic,AZ - Stamback,West,East,1033,America/Phoenix
+167,TUC,162372,AZ - Stamback Rolloffs,AZ - Stamback,West,East,1033,America/Phoenix
+169,TUC,162375,AZ - Stamback Toilets,AZ - Stamback,West,East,1033,America/Phoenix
+166,TUC,162377,AZ - Stamback Admin,AZ - Stamback,West,West,1033,America/Phoenix
+165,TUC,162497,AZ - Stamback - VIP Trailers,AZ - Stamback,West,West,1033,America/Phoenix
+90,FTPRC,60498,FL - Freedom,FL - Freedom,South Central,East,1006,America/New_York
+91,GAINES,134638,FL - Gainsville Porta Serve,FL - Gainesville Porta Serve,South Central,West,1026,America/New_York
+93,FTMY,101637,FL - Premier & Prestigious,FL - West Florida,South Central,West,1018,America/New_York
+92,NAP,110782,FL - JW Craft,FL - West Florida,South Central,West,1018,America/New_York
+94,CLTN,102953,GA - GCI,GA - GCI,South Central,West,1019,America/New_York
+95,AGSTA,53751,GA -PSI Augusta,GA/SC - PSI,Southeast,West,1007,America/New_York
+135,COLSC,54012,SC - PSI Columbia,GA/SC - PSI,Southeast,West,1007,America/New_York
+96,CR,138855,IA - Cedar Rapids,IA - Cedar Rapids,North,East,1029,America/Chicago
+101,SHEPD,54016,KY - Bullitt Sep. Service,KY - Bullitt Sep. Service,North,East,1008,America/New_York
+102,LEX2,100868,KY - Lex,KY - Lex,North,West,1017,America/New_York
+106,LOUIS1,54013,KY - moon portables,KY - Moon,North,West,1005,America/New_York
+104,LOUIS1,54014,KY - Moon leasing,KY - Moon,North,West,1005,America/New_York
+105,LOUIS1,54015,KY - Moon Minis,KY - Moon,North,East,1005,America/New_York
+103,LOUIS1,171121,KY - Moon,KY - Moon,North,West,1005,America/New_York
+117,TUP,151195,MS - American Johnny,MS - American Johnny,Gulf South,East,1028,America/Chicago
+118,JACKS,119580,MS - Gotta Go,MS - Gotta Go,Gulf South,East,1021,America/Chicago
+121,CLT,55550,NC - Denver,NC - ASC,Southeast,West,1012,America/New_York
+119,CLT,55552,NC -  ASC,NC - ASC,Southeast,East,1012,America/New_York
+123,GSO,55551,NC - Greensboro,NC - ASC,Southeast,East,1012,America/New_York
+120,SAL,55551,NC - ASC - Salisbury,NC - ASC,Southeast,West,1012,America/New_York
+125,ASHE,53753,NC - Griffin Waste Pump Trucks,NC - Griffin,Southeast,West,1003,America/New_York
+124,ASHE,68660,NC - Griffin Hook trucks,NC - Griffin,Southeast,West,1003,America/New_York
+128,TOL,76130,OH - C&L and Safeway,OH - C&L and Safeway,North,West,1015,America/New_York
+132,PHILLY,50046,PA - Port A Bowl,PA - Port A Bowl,North,West,1011,America/New_York
+131,PHILLY,99738,PA - Malvern,PA - Port A Bowl,North,West,1011,America/New_York
+134,GSC,137745,SC - Littlejohn,SC - Littlejohn,Southeast,West,1027,America/New_York
+138,CHATT,123039,TN - Chattanooga -Bolles,TN - Chattanooga - Bolles,South Central,East,1024,America/New_York
+139,CROSS,55431,TN - ETP,TN - ETP,Southeast,East,1004,America/Chicago
+140,KNOX,55431,TN - ETP,TN - ETP,Southeast,East,1004,America/New_York
+146,GREEN,60569,TN - MC Septic,TN - MC Septic,Southeast,East,1009,America/New_York
+147,MEM,63332,TN - Memphis - Safety Quip,TN - Memphis - Safety Quip,Gulf South,East,1014,America/Chicago
+141,CLARK,55429,TN - FusionSite (Clark),TN - Nashville,Southeast,East,1013,America/Chicago
+143,NASH,55428,TN - FusionSite (Nashville),TN - Nashville,Southeast,East,1013,America/Chicago
+142,NASH,55429,TN - FusionSite (Clark),TN - Nashville,Southeast,East,1013,America/Chicago
+148,HAR,119083,TX - ACP,TX - ACP,West,East,1023,America/Chicago
+149,LAR,119083,TX - ACP,TX - ACP,West,East,1023,America/Chicago
+150,SAT,119083,TX - ACP,TX - ACP,West,East,1023,America/Chicago
+155,WYTHE,130474,VA - R&R,VA - R&R,Southeast,East,1025,America/New_York
+156,MAD,110783,WI - Buckys,WI - Buckys,North,West,1020,America/Chicago
+159,LODI,120444,WI - Stranders,WI - Stranders,North,East,1022,America/Chicago
+222,SWFL,101637,FL - Premier & Prestigious,FL - West Florida,South Central,West,1018,America/New_York
+223,SWFL,110782,FL - JW Craft,FL - West Florida,South Central,West,1018,America/New_York
+197,ESOL,171501,LA - Event Solutions - LAF (ES),LA - Event Solutions,Gulf South,East,1035,America/Chicago
+209,FORZ,117032,MIDLAND,TX - Forza,West,East,1030,America/Chicago
