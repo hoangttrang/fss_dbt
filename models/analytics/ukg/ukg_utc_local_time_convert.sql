@@ -37,3 +37,4 @@ SELECT entry_id, account_id, start_date, end_date, date,
 	
 FROM time_entries
 	LEFT JOIN employ_full_timezone ON time_entries.account_id = employ_full_timezone.row_id
+WHERE total IS NOT NULL AND calc_total IS NOT NULL
