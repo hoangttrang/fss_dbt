@@ -10,9 +10,10 @@ SELECT
     CAST(end_date AS timestamp without time zone) AS end_date,
     CAST(grade AS character varying) AS grade,
     CAST(last_active_date AS timestamp without time zone) AS last_active_date,
-    CAST("offeringId" AS character varying) AS offeringId,
+    CAST(offering_id AS character varying) AS offering_id,
     CAST(title AS character varying) AS title,
     CAST(status AS character varying) AS status,
     CAST(inserted_at AS timestamp without time zone) AS inserted_at,
-    CAST(updated_at AS timestamp without time zone) AS updated_at
+    CAST(updated_at AS timestamp without time zone) AS updated_at,
+    CAST(grader_id AS character varying) AS grader_id
 FROM data_digital_chalk_registrations

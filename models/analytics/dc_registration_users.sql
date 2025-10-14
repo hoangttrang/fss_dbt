@@ -19,7 +19,7 @@ SELECT
     , r.end_date
     , r.grade
     , r.last_active_date
-    , r.offeringId
+    , r.offering_id
     , r.title
     , r.status
     , r.created_date
