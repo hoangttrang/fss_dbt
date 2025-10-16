@@ -61,3 +61,13 @@ sources:
       - name: organization_level
       - name: compensation
       - name: pay_register
+  - name: ukg_ready
+    description: This schema contains UKG ready data.
+    database: citus
+    schema: ukg_ready
+    tables:
+      - name: time_entries
+        description: This table contains each employee's start and end dates and times.
+      - name: employee
+        description: This table contains each employee's demographic and employment information.
+          

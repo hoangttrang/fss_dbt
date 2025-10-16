@@ -14,6 +14,8 @@ models:
           column_name: employee_id
   - name: ukg_weekly_payment_salary
   - name: ukg_hourly_salary_spend
+  - name: ukg_utc_local_time_convert
+    description: "This model converts start and end time in UTC into local time based on employee's timezone."
   - name: ggl_ads_campaign_report
     description: "Google Ads campaigns data."
   - name: dc_registration_users
@@ -26,11 +28,14 @@ models:
     - not_null:
         column_name: agent_login_id
     - dbt_utils.unique_combination_of_columns:
-        combination_of_columns:
-          - agent_id
-          - agent_login_start_date
-          - agent_login_start_time
+        arguments:
+          combination_of_columns:
+            - agent_id
+            - agent_login_start_date
+            - agent_login_start_time
     - dbt_utils.expression_is_true:
-        expression: "total_login_time >= available"
-        severity: error
+        arguments:
+          expression: "total_login_time >= available"
+        config:
+          severity: error
     

@@ -6,30 +6,36 @@ models:
   - name: stg_ukg_employment
     tests:
       - dbt_utils.unique_combination_of_columns: 
-          combination_of_columns:
-            - employee_id
-            - company_id
+          arguments:
+            combination_of_columns:
+              - employee_id
+              - company_id
   - name: stg_ukg_employee_change
   - name: stg_ukg_earning_history_base_element
   - name: stg_ukg_dependent_deduction
     tests: 
     - dbt_utils.unique_combination_of_columns: 
-        combination_of_columns:
-          - id
-          - contact_id
-          - company_id 
-          - employee_id
+        arguments:
+          combination_of_columns:
+            - id
+            - contact_id
+            - company_id 
+            - employee_id
   - name: stg_ukg_employee_status
   - name: stg_ukg_job
     tests:
       - dbt_utils.unique_combination_of_columns: 
-          combination_of_columns:
+          arguments:
+            combination_of_columns:
             - id
   - name: stg_ukg_organization_level
     tests:
       - dbt_utils.unique_combination_of_columns: 
-          combination_of_columns:
+          arguments:
+            combination_of_columns:
             - id
             - level
   - name: stg_ukg_compensation
   - name: stg_ukg_pay_register
+  - name: stg_ukg_ready_employee
+  - name: stg_ukg_ready_time_entries
