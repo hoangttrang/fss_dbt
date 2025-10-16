@@ -6,10 +6,13 @@ WITH employee AS(
     SELECT * FROM {{ ref('stg_ukg_employment') }}
 )
 
-, employ_full AS(
+, employee_full AS(
     SELECT 
         employee.id AS row_id, 
         employee.employee_id, 
+        employee.first_name,
+        employee.last_name,
+        employment.job_description, 
         employment.id, 
         employment.organization_level_4_id
     FROM employee
@@ -17,18 +20,22 @@ WITH employee AS(
         ON employee.employee_id = employment.id
 )
 
-,motive_timezone AS (
+, motive_timezone AS (
     SELECT * FROM {{ ref ('consolidated_site_mapping_with_timezone')}}
 )
 
-, employ_full_timezone AS(
+, employee_full_timezone AS(
     SELECT 
-        employ_full.row_id, 
-        employ_full.organization_level_4_id, 
+        employee_full.row_id, 
+        employee_full.employee_id,
+        employee_full.first_name,
+        employee_full.last_name,
+        employee_full.organization_level_4_id, 
+        employee_full.job_description,
         timezone
-    FROM employ_full
+    FROM employee_full
         LEFT JOIN motive_timezone 
-            ON employ_full.organization_level_4_id = motive_timezone.ukg_location_id
+            ON employee_full.organization_level_4_id = motive_timezone.ukg_location_id
 )
 
 , time_entries AS (
@@ -38,10 +45,14 @@ WITH employee AS(
 SELECT 
     entry_id, 
     account_id, 
+    employee_full_timezone.employee_id,
+    employee_full_timezone.first_name,
+    employee_full_timezone.last_name,
+    employee_full_timezone.job_description,
     start_date, 
     end_date, 
     date, 
-    organization_level_4_id AS work_location_id,
+    organization_level_4_id AS ukg_location_id,
 	start_time, 
     start_time AT TIME ZONE timezone AS start_time_local, 
 	end_time, 
@@ -51,9 +62,12 @@ SELECT
     is_raw, 
     is_calc, 
 	calc_start_time, 
-    calc_start_time AT TIME ZONE timezone AS calc_start_time_local, 
+    employee_full_timezone.timezone, 
+    calc_start_time AT TIME ZONE employee_full_timezone.timezone AS calc_start_time_local, 
 	calc_end_time, 
-    calc_end_time AT TIME ZONE timezone AS calc_end_time_local,
+    calc_end_time AT TIME ZONE employee_full_timezone.timezone AS calc_end_time_local,
+    EXTRACT(EPOCH FROM (calc_end_time - calc_start_time))/3600 AS total_hours_calc,
+    EXTRACT(EPOCH FROM (end_time - start_time))/3600 AS total_hours_norm,
 	calc_total, 
     piecework, 
     amount, 
@@ -61,6 +75,6 @@ SELECT
     time_off_id, 
     cost_center_ids
 FROM time_entries
-	LEFT JOIN employ_full_timezone 
-        ON time_entries.account_id = employ_full_timezone.row_id
-WHERE total IS NOT NULL AND calc_total IS NOT NULL
+LEFT JOIN employee_full_timezone 
+    ON time_entries.account_id = employee_full_timezone.row_id
+WHERE employee_full_timezone.organization_level_4_id IS NOT NULL

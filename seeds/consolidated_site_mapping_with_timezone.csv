@@ -147,3 +147,4 @@ id,ukg_location_id,motive_group_id,motive_group_name,consolidated_site,region,su
 223,SWFL,110782,FL - JW Craft,FL - West Florida,South Central,West,1018,America/New_York
 197,ESOL,171501,LA - Event Solutions - LAF (ES),LA - Event Solutions,Gulf South,East,1035,America/Chicago
 209,FORZ,117032,MIDLAND,TX - Forza,West,East,1030,America/Chicago
+,HOME,0,Home Office,Home Office,Corporate,,,America/Chicago
