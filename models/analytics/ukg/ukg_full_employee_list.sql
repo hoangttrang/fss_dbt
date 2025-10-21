@@ -27,6 +27,7 @@ WITH dependent_deduction AS (
         t1.employee_id,
         t1.employment_id,
         MAX(t1.annual_salary) AS latest_annual_salary,
+        MAX(t1.hourly_pay_rate) AS latest_hourly_pay_rate,
         t1.pay_date AS latest_pay_date
     FROM pay_register t1
     INNER JOIN (
@@ -90,6 +91,7 @@ WITH dependent_deduction AS (
     e.gender, 
     e.ethnic_description,
     latest_annual_salary.latest_annual_salary, 
+    latest_annual_salary.latest_hourly_pay_rate,
     latest_annual_salary.latest_pay_date,
     em.organization_level_4_id AS site_id,
     gl_translation.description AS site_description,
