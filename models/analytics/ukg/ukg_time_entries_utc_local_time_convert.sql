@@ -62,6 +62,21 @@ WITH employee AS(
     WHERE time_off_id IS NULL AND calc_total <> 0
 )
 
+, pay_register AS (
+    SELECT * FROM {{ ref ('stg_ukg_pay_register')}}
+)
+
+, pay_rate_window AS(
+    SELECT 
+        employee_id, 
+        employment_id, 
+        pay_date, 
+        hourly_pay_rate,
+        pay_date - INTERVAL '11 days' AS pay_rate_start_date, 
+        pay_date - INTERVAL '5 days' AS pay_rate_end_date
+    FROM pay_register
+)
+
 , final_tab AS (
     SELECT 
         entry_id, 
@@ -76,6 +91,7 @@ WITH employee AS(
         employee_full_timezone.site_description,
         employee_full_timezone.organization_level_4_id AS ukg_location_id,
         employee_full_timezone.latest_hourly_pay_rate,
+        pay_rate_window.hourly_pay_rate,
         CAST(date - (EXTRACT(DOW FROM date)::int - 1) * INTERVAL '1 day' AS date) AS timesheet_start,
         CAST(date - (EXTRACT(DOW FROM date)::int - 7) * INTERVAL '1 day' + INTERVAL '6 days' AS date) AS timesheet_end,
         date, 
@@ -94,6 +110,9 @@ WITH employee AS(
     FROM time_entries_transform
     LEFT JOIN employee_full_timezone 
         ON time_entries_transform.account_id = employee_full_timezone.row_id
+    LEFT JOIN pay_rate_window
+        ON employee_full_timezone.employment_id = pay_rate_window.employment_id
+        AND date BETWEEN pay_rate_start_date AND pay_rate_end_date
     WHERE employee_full_timezone.organization_level_4_id IS NOT NULL 
     ) 
 
