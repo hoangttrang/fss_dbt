@@ -68,13 +68,14 @@ WITH employee AS(
 
 , pay_rate_window AS(
     SELECT 
-        employee_id, 
         employment_id, 
-        pay_date, 
-        hourly_pay_rate,
-        pay_date - INTERVAL '11 days' AS pay_rate_start_date, 
-        pay_date - INTERVAL '5 days' AS pay_rate_end_date
+        pay_date,
+		MAX(hourly_pay_rate) AS hourly_pay_rate,
+		pay_date - INTERVAL '11 days' AS pay_rate_start_date, 
+		pay_date - INTERVAL '5 days' AS pay_rate_end_date
     FROM pay_register
+    GROUP BY employment_id, pay_date
+    ORDER BY employment_id, pay_date
 )
 
 , final_tab AS (
