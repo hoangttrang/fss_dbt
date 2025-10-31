@@ -43,14 +43,21 @@ WITH employee AS(
 
 , time_entries_transform AS (
     SELECT 
-        DISTINCT 
         account_id, 
-        start_date, 
-        end_date, 
-        entry_id, 
         date, 
-        start_time, 
-        end_time, 
+        total, 
+        is_raw, 
+        is_calc, 
+        calc_start_time, 
+        calc_end_time,
+        calc_total, 
+        approval_status, 
+        MAX(entry_id) AS entry_id   
+    FROM time_entries
+    WHERE time_off_id IS NULL AND calc_total <> 0 and total is NOT NULL
+    GROUP BY 
+        account_id, 
+        date, 
         total, 
         is_raw, 
         is_calc, 
@@ -58,8 +65,6 @@ WITH employee AS(
         calc_end_time,
         calc_total, 
         approval_status
-    FROM time_entries
-    WHERE time_off_id IS NULL AND calc_total <> 0
 )
 
 , pay_register AS (
