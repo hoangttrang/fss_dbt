@@ -14,7 +14,7 @@ models:
           column_name: employee_id
   - name: ukg_weekly_payment_salary
   - name: ukg_hourly_salary_spend
-  - name: ukg_time_entries_utc_local_time_convert
+  - name: ukg_local_time_convert
     description: "This model converts start and end time in UTC into local time based on employee's timezone."
     columns: 
       - name: employment_id 
