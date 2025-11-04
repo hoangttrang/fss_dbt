@@ -14,8 +14,23 @@ models:
           column_name: employee_id
   - name: ukg_weekly_payment_salary
   - name: ukg_hourly_salary_spend
-  - name: ukg_time_entries_utc_local_time_convert
+  - name: ukg_time_entry_local
     description: "This model converts start and end time in UTC into local time based on employee's timezone."
+    columns: 
+      - name: employment_id 
+        tests: 
+          - not_null
+      - name: employee_id
+        tests: 
+          - not_null
+    tests: 
+    - dbt_utils.unique_combination_of_columns:
+        arguments:
+          combination_of_columns:
+            - employment_id 
+            - date 
+            - timesheet_start_time_utc
+            - hourly_pay_rate
   - name: ggl_ads_campaign_report
     description: "Google Ads campaigns data."
   - name: dc_registration_users

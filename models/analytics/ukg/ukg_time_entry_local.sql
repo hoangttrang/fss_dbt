@@ -43,14 +43,26 @@ WITH employee AS(
 
 , time_entries_transform AS (
     SELECT 
-        DISTINCT 
         account_id, 
-        start_date, 
-        end_date, 
-        entry_id, 
         date, 
-        start_time, 
-        end_time, 
+        total, 
+        is_raw, 
+        is_calc, 
+        calc_start_time, 
+        calc_end_time,
+        calc_total, 
+        approval_status, 
+        MAX(entry_id) AS entry_id,
+        CASE 
+            WHEN calc_total IS NOT NULL AND calc_total <> 0 THEN calc_total
+            WHEN (calc_total IS NULL OR calc_total = 0) AND total <> 0 THEN total
+            ELSE 0
+        END AS adjusted_total
+    FROM time_entries
+    WHERE time_off_id IS NULL
+    GROUP BY 
+        account_id, 
+        date, 
         total, 
         is_raw, 
         is_calc, 
@@ -58,8 +70,22 @@ WITH employee AS(
         calc_end_time,
         calc_total, 
         approval_status
-    FROM time_entries
-    WHERE time_off_id IS NULL AND calc_total <> 0
+)
+
+, pay_register AS (
+    SELECT * FROM {{ ref ('stg_ukg_pay_register')}}
+)
+
+, pay_rate_window AS(
+    SELECT 
+        employment_id, 
+        pay_date,
+        MAX(hourly_pay_rate) AS hourly_pay_rate,
+        pay_date - INTERVAL '11 days' AS pay_rate_start_date, 
+        pay_date - INTERVAL '5 days' AS pay_rate_end_date
+    FROM pay_register
+    GROUP BY employment_id, pay_date
+    ORDER BY employment_id, pay_date
 )
 
 , final_tab AS (
@@ -76,6 +102,7 @@ WITH employee AS(
         employee_full_timezone.site_description,
         employee_full_timezone.organization_level_4_id AS ukg_location_id,
         employee_full_timezone.latest_hourly_pay_rate,
+        pay_rate_window.hourly_pay_rate,
         CAST(date - (EXTRACT(DOW FROM date)::int - 1) * INTERVAL '1 day' AS date) AS timesheet_start,
         CAST(date - (EXTRACT(DOW FROM date)::int - 7) * INTERVAL '1 day' + INTERVAL '6 days' AS date) AS timesheet_end,
         date, 
@@ -87,14 +114,17 @@ WITH employee AS(
         calc_start_time AT TIME ZONE employee_full_timezone.timezone AS timesheet_start_time_local, 
         calc_end_time AS timesheet_end_time_utc, 
         calc_end_time AT TIME ZONE employee_full_timezone.timezone AS timesheet_end_time_local,
-        calc_total , 
-        (CAST (calc_total AS FLOAT) /3600000) AS calc_total_hours, 
-        to_char( (calc_total || ' milliseconds')::interval, 'HH24:MI' ) AS duration_hhmm,
-        (CAST (calc_total AS FLOAT) /3600000) * employee_full_timezone.latest_hourly_pay_rate AS total_rate_amount
+        adjusted_total, 
+        (CAST (adjusted_total AS FLOAT) /3600000) AS adjusted_total_hours, 
+        to_char( (adjusted_total || ' milliseconds')::interval, 'HH24:MI' ) AS duration_hhmm,
+        (CAST (adjusted_total AS FLOAT) /3600000) * employee_full_timezone.latest_hourly_pay_rate AS total_rate_amount
     FROM time_entries_transform
     LEFT JOIN employee_full_timezone 
         ON time_entries_transform.account_id = employee_full_timezone.row_id
-    WHERE employee_full_timezone.organization_level_4_id IS NOT NULL 
+    LEFT JOIN pay_rate_window
+        ON employee_full_timezone.employment_id = pay_rate_window.employment_id
+        AND date BETWEEN pay_rate_start_date AND pay_rate_end_date
+    WHERE employee_full_timezone.organization_level_4_id IS NOT NULL AND adjusted_total > 0
     ) 
 
 SELECT DISTINCT *
