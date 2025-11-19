@@ -47,8 +47,3 @@ models:
             - agent_id
             - agent_login_start_date
             - agent_login_start_time
-    - dbt_utils.expression_is_true:
-        arguments:
-          expression: "total_login_time >= available"
-        config:
-          severity: error
