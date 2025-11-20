@@ -10,7 +10,7 @@ WITH employee AS(
     SELECT * FROM {{ ref('stg_ukg_ready_time_entries') }}
 
 )
-
+-- Merge employee info with full employee list to get employee and employment information
 , full_employee_list AS (
     SELECT 
         ukg_ready_employee.id AS row_id,
@@ -31,7 +31,7 @@ WITH employee AS(
 , motive_timezone AS (
     SELECT * FROM {{ ref ('consolidated_site_mapping_with_timezone')}}
 )
-
+-- Add timezone info to full employee list
 , employee_full_timezone AS(
     SELECT 
         full_employee_list.*, 
@@ -40,19 +40,19 @@ WITH employee AS(
         LEFT JOIN motive_timezone 
             ON full_employee_list.organization_level_4_id = motive_timezone.ukg_location_id
 )
-
+-- Add year_week and adjusted total calculation
 , time_entries_transform AS (
     SELECT 
         account_id, 
         date, 
+        TO_CHAR(date, 'IYYY-IW') AS year_week,
         total, 
         is_raw, 
         is_calc, 
         calc_start_time, 
         calc_end_time,
         calc_total, 
-        approval_status, 
-        MAX(entry_id) AS entry_id,
+        approval_status,
         CASE 
             WHEN calc_total IS NOT NULL AND calc_total <> 0 THEN calc_total
             WHEN (calc_total IS NULL OR calc_total = 0) AND total <> 0 THEN total
@@ -76,21 +76,17 @@ WITH employee AS(
     SELECT * FROM {{ ref ('stg_ukg_pay_register')}}
 )
 
-, pay_rate_window AS(
+, employee_max_weekly_pay  AS(
     SELECT 
         employment_id, 
-        pay_date,
-        MAX(hourly_pay_rate) AS hourly_pay_rate,
-        pay_date - INTERVAL '11 days' AS pay_rate_start_date, 
-        pay_date - INTERVAL '5 days' AS pay_rate_end_date
+        TO_CHAR(pay_date - INTERVAL '7 days', 'IYYY-IW') AS pay_for_year_week, -- We assume pay date is the week after the timesheet week.
+        MAX(hourly_pay_rate) AS hourly_pay_rate
     FROM pay_register
-    GROUP BY employment_id, pay_date
-    ORDER BY employment_id, pay_date
+    GROUP BY employment_id, pay_for_year_week
 )
 
 , final_tab AS (
     SELECT 
-        entry_id, 
         account_id, 
         employee_full_timezone.employee_id,
         CAST(employee_full_timezone.employment_id AS INT) AS employment_id,
@@ -102,7 +98,7 @@ WITH employee AS(
         employee_full_timezone.site_description,
         employee_full_timezone.organization_level_4_id AS ukg_location_id,
         employee_full_timezone.latest_hourly_pay_rate,
-        pay_rate_window.hourly_pay_rate,
+        employee_max_weekly_pay.hourly_pay_rate,
         CAST(date - (EXTRACT(DOW FROM date)::int - 1) * INTERVAL '1 day' AS date) AS timesheet_start,
         CAST(date - (EXTRACT(DOW FROM date)::int - 7) * INTERVAL '1 day' + INTERVAL '6 days' AS date) AS timesheet_end,
         date, 
@@ -121,9 +117,9 @@ WITH employee AS(
     FROM time_entries_transform
     LEFT JOIN employee_full_timezone 
         ON time_entries_transform.account_id = employee_full_timezone.row_id
-    LEFT JOIN pay_rate_window
-        ON employee_full_timezone.employment_id = pay_rate_window.employment_id
-        AND date BETWEEN pay_rate_start_date AND pay_rate_end_date
+    LEFT JOIN employee_max_weekly_pay
+        ON employee_full_timezone.employment_id = employee_max_weekly_pay.employment_id
+        AND time_entries_transform.year_week = employee_max_weekly_pay.pay_for_year_week
     WHERE employee_full_timezone.organization_level_4_id IS NOT NULL AND adjusted_total > 0
     ) 
 
