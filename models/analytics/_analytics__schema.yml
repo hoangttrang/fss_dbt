@@ -29,6 +29,7 @@ models:
           combination_of_columns:
             - employment_id 
             - timesheet_start_time_utc
+            - timesheet_end_time_utc
           where: "timesheet_start_time_local is not null"
   - name: ggl_ads_campaign_report
     description: "Google Ads campaigns data."
