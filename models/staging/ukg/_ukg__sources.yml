@@ -61,6 +61,7 @@ sources:
       - name: organization_level
       - name: compensation
       - name: pay_register
+      - name: location
   - name: ukg_ready
     description: This schema contains UKG ready data.
     database: citus

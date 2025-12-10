@@ -39,3 +39,4 @@ models:
   - name: stg_ukg_pay_register
   - name: stg_ukg_ready_employee
   - name: stg_ukg_ready_time_entries
+  - name: stg_ukg_location
