@@ -1,0 +1,5 @@
+version: 2
+
+# This is used to documentation on the database and the schema 
+models: 
+  - name: stg_entra_users

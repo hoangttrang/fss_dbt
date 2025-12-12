@@ -1,0 +1,10 @@
+version: 2 
+
+sources: 
+  - name: general_orgs
+    database: citus
+    schema: public
+    description: "General Purpose source data."
+    tables: 
+      - name: entra_users
+        description: "Source table for Entra users data."
