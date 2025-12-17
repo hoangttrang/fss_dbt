@@ -28,7 +28,7 @@ WITH monthly_events AS (
         region AS "Region"
         , 'Percent Unassigned Trips' AS "Metric"
         {%- for month in var('months_list') -%}
-        , COALESCE(CAST(COUNT(DISTINCT CASE WHEN driver_id IS NULL AND month = '{{ month }}' THEN event_id END) AS FLOAT) 
+        , COALESCE(CAST(COUNT(DISTINCT CASE WHEN unassigned_new = 1 AND month = '{{ month }}' THEN event_id END) AS FLOAT) 
         / NULLIF(COUNT(DISTINCT CASE WHEN month = '{{ month }}' THEN event_id END), 0), 0) AS "{{ month }}"
         {%- endfor %}
     FROM rank_trips
@@ -36,6 +36,7 @@ WITH monthly_events AS (
     AND row_num = 1 AND translated_site IS NOT NULL
     GROUP BY region, "Metric"
 )
+
 , pct_unassigned_final AS (
     SELECT 
         bg."Region",
@@ -48,7 +49,6 @@ WITH monthly_events AS (
         ON bg."Region" = dc."Region"
         AND bg."Metric" = dc."Metric"
 )
-
 
 SELECT *
 FROM pct_unassigned_final

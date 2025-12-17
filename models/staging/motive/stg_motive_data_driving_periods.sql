@@ -36,5 +36,6 @@ SELECT
     , updated_at 
     , unassigned
     , not_current 
+    , notes
 FROM data_driving_periods
 WHERE not_current IS FALSE OR not_current IS NULL

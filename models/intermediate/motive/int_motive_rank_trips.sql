@@ -22,6 +22,7 @@ SELECT
     , a.created_at
     , a.updated_at
     , a.unassigned
+    , a.notes
     , vehicle_map_rs.number
     , vehicle_map_rs.status
     , vehicle_map_rs.make
@@ -29,6 +30,12 @@ SELECT
     , vehicle_map_rs.group_name
     , vehicle_map_rs.translated_site
     , vehicle_map_rs.region
+    , CASE WHEN ( 
+            driver_id IS NULL 
+			AND NOT (driving_period_type ='ym'
+                OR lower(coalesce(notes, '')) LIKE '%yard%')) THEN 1
+        ELSE 0 
+        END AS unassigned_new
     , ROW_NUMBER() OVER (
         PARTITION BY a.vehicle_id, a.start_date
         ORDER BY CASE WHEN driver_id IS NOT NULL THEN 1 ELSE 2 END
