@@ -13,4 +13,7 @@ SELECT
     , CAST(driver_id AS INT) AS driver_id
     , CAST(mechanic_id AS INT) AS mechanic_id
     , CAST(reviewer_id AS INT) AS reviewer_id
+    , CAST(inspection_duration AS INT) AS inspection_duration
+    , CAST(minor_defect_count AS INT) AS minor_defect_count
+    , CAST(major_defect_count AS INT) AS major_defect_count
 FROM data_inspect

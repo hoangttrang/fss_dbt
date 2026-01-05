@@ -24,8 +24,8 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 # set universal variable that can be used multiple locations: 
 vars: 
-  mbr_start_date: '2025-01-01'
-  mbr_report_date: '2025-12-31'
+  mbr_start_date: '2026-01-01'
+  mbr_report_date: '2026-12-31'
   months_list: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
 # Configuring models

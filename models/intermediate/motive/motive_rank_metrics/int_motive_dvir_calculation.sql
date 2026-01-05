@@ -44,6 +44,7 @@ WITH vehicle_map_rs AS (
 	JOIN vehicle_map_rs b
 	ON a.vehicle_id = b.vehicle_id
 	WHERE 1=1
+	AND inspection_duration >= 300 
 	AND date  BETWEEN '{{var("mbr_start_date")}}' AND '{{ var("mbr_report_date")}}'
 	GROUP BY 
         b.region,
@@ -71,3 +72,41 @@ WITH vehicle_map_rs AS (
 
 SELECT * FROM for_aggregation
 WHERE translated_site IS NOT NULL
+
+
+
+""" NEW DVIR code 
+with dp AS (select 	distinct group_name, translated_site, vehicle_id, driver_id, cast(start_date as date) as date
+from dbt_thoang.int_motive_rank_trips ) 
+
+, vehicle_map_rs AS (
+    SELECT * FROM dbt_thoang.int_motive_vehicle_group_map_rs
+)
+
+, required_dvir AS (select 
+	group_name, translated_site, date, COUNT(*)*2 as required_dvir
+from dp
+group by 1,2,3) 
+
+, inspections AS ( 
+	select 
+	group_name, translated_site, date, COUNT(DISTINCT inspection_id) as complete_inspections
+	from public.data_inspections di
+	left join vehicle_map_rs vms
+	on vms.vehicle_id = di.vehicle_id
+	where inspection_duration >= 300
+	and date  BETWEEN '2025-01-01' and '2025-12-31' 
+	AND vms.translated_site IS NOT NULL
+	GROUP BY 1,2,3
+)
+
+select 
+	required_dvir.*, COALESCE(inspections.complete_inspections, 0) AS complete_inspections
+from required_dvir
+left join inspections 
+on required_dvir.group_name = inspections.group_name
+and required_dvir.translated_site = inspections.translated_site
+and required_dvir.date = inspections.date
+--where inspections.complete_inspections is null
+
+"""
