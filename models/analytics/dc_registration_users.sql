@@ -6,7 +6,9 @@ WITH dc_registrations AS (
 )
 
 , dc_users AS (
-    SELECT * FROM {{ ref('stg_dc_users') }}
+    SELECT *
+    , regexp_replace(lower(username), '@.*$', '') AS dc_username_clean
+    FROM {{ ref('stg_dc_users') }}
 )
 
 , full_ukg_employee_list AS (
@@ -14,7 +16,10 @@ WITH dc_registrations AS (
 )
 
 , entra_users AS (
-    SELECT * FROM {{ ref('stg_entra_users') }}
+    SELECT 
+        * 
+        , regexp_replace(regexp_replace(lower(user_principal_name), '@.*$', ''),'\d+$','') AS entra_username_clean
+    FROM {{ ref('stg_entra_users') }}
 )
 
 , entra_w_ukg AS (
@@ -23,11 +28,14 @@ WITH dc_registrations AS (
         entra.employee_id, 
         COALESCE(entra.job_title, employee_list.job_description) AS job_title, 
         COALESCE(entra.company_name, employee_list.site_description) AS company_name, 
-        employee_list.work_location
-    FROM public.data_digital_chalk_users dc
-    LEFT JOIN public.entra_users entra
-        ON lower(dc.username)= lower(user_principal_name)
-    LEFT JOIN dbt_analytics.ukg_full_employee_list employee_list 
+        employee_list.work_location, 
+        employee_list.region,
+        employee_list.consolidated_site
+    FROM dc_users dc
+    LEFT JOIN entra_users entra
+        ON lower(dc.dc_username_clean)= lower(entra.entra_username_clean)
+            OR lower(dc.email)= lower(entra.email)
+    LEFT JOIN full_ukg_employee_list employee_list 
         ON employee_list.employment_id = entra.employee_id
 )     
 
@@ -54,6 +62,8 @@ SELECT
 	, u.job_title AS job_title
 	, u.company_name AS company_name
     , u.work_location AS work_location
+    , u.region AS region
+    , u.consolidated_site AS site
 FROM dc_registrations r
 LEFT JOIN entra_w_ukg u 
 	ON r.dc_user_id = u.dc_user_id

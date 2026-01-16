@@ -30,6 +30,10 @@ WITH dependent_deduction AS (
     SELECT * FROM {{ ref('stg_ukg_location') }}
 )
 
+, site_mapping AS (
+    SELECT * FROM {{ ref('stg_motive_consolidated_sites') }}
+)
+
 , latest_annual_salary AS (
     SELECT 
         t1.employee_id,
@@ -104,6 +108,8 @@ WITH dependent_deduction AS (
         latest_annual_salary.latest_hourly_pay_rate,
         latest_annual_salary.latest_pay_date,
         em.organization_level_4_id AS site_id,
+        sm.region, 
+        sm.consolidated_site,
         gl_translation.description AS site_description,
         l.description AS work_location,
         em.date_of_termination,
@@ -127,6 +133,8 @@ WITH dependent_deduction AS (
         ON e.id = ec.employee_id
     LEFT JOIN location l
         ON em.primary_work_location_id = l.id 
+    LEFT JOIN site_mapping sm
+        ON em.organization_level_4_id = sm.ukg_location_id
 ) 
 
 SELECT 
