@@ -32,6 +32,10 @@ WITH dependent_deduction AS (
 
 , site_mapping AS (
     SELECT * FROM {{ ref('stg_motive_consolidated_sites') }}
+    WHERE NOT (
+        consolidated_site = 'NY - A - John'
+        AND ukg_location_id = 'NEWAL'
+    )
 )
 
 , latest_annual_salary AS (
@@ -77,6 +81,7 @@ WITH dependent_deduction AS (
 
 , final_table AS (
     SELECT 
+        DISTINCT 
         e.id AS employee_id,
         e.first_name,
         e.last_name,
