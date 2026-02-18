@@ -1,5 +1,5 @@
 -- This model maps data vehicle group mappings to site and region translations.
-
+{{ config(materialized='table', sort='group_name', dist='id') }}
 WITH vehicle_map AS (
     SELECT * FROM {{ ref('stg_motive_data_vehicle_group_mappings') }}
 )
