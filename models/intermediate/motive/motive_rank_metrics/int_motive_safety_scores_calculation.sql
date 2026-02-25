@@ -8,6 +8,10 @@ WITH vehicle_map_rs AS (
     SELECT * FROM {{ ref('int_motive_event_breakdown') }}
 )
 
+, positive_event_breakdown AS (
+    SELECT * FROM {{ ref('int_motive_event_positive_breakdown') }}
+)
+
 , rank_trips AS (
     SELECT * FROM {{ ref('int_motive_rank_trips') }}
 )
@@ -36,9 +40,16 @@ GROUP BY
         dd.{{month | lower}}_miles_driven,
     {% endfor %}
 	eb.*
+    {%- for month in var('months_list') %}
+        {% for event_type in get_motive_positive_event_type() -%}
+            , COALESCE(peb.{{ month|lower }}_{{ event_type }}, 0) AS {{ month|lower }}_{{ event_type }}
+        {%- endfor %}
+    {% endfor %}
 	FROM  drive_distances dd
 	LEFT JOIN event_breakdown eb
 	ON eb.region = dd.region AND eb.translated_site = dd.translated_site
+    LEFT JOIN positive_event_breakdown peb
+    ON peb.region = dd.region AND peb.translated_site = dd.translated_site
 )
 
 SELECT 

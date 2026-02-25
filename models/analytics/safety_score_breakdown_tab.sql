@@ -18,6 +18,10 @@ WITH driving_periods AS (
     SELECT * FROM {{ ref('stg_motive_data_combined_events') }}
 )
 
+, positive_events AS (
+    SELECT * FROM {{ ref('stg_motive_data_positive_behavior_events') }}
+) 
+
 , combined_events_group_mappings AS ( 
     SELECT combined_events.id,
         combined_events.event_id,
@@ -44,6 +48,30 @@ WITH driving_periods AS (
         ON combined_events.vehicle_id = vehicle_map_rs.vehicle_id
     WHERE translated_site IS NOT NULL
     AND (combined_events.not_current IS FALSE OR combined_events.not_current IS NULL) 
+)
+
+, combined_positive_events_group_mappings AS ( 
+    SELECT 
+        positive_events.id,
+        positive_events.event_id,
+        positive_events.positive_behavior AS type,
+        positive_events.driver_id,
+        positive_events.driver_first_name,
+        positive_events.driver_last_name,
+        positive_events.vehicle_id,
+        positive_events.start_date,
+        positive_events.coaching_status,
+        positive_events.date,
+        positive_events.created_at,
+        positive_events.updated_at,
+        positive_events.not_current,
+        vehicle_map_rs.region,
+        vehicle_map_rs.translated_site,
+        vehicle_map_rs.group_name
+    FROM positive_events
+    JOIN vehicle_map_rs
+        ON positive_events.vehicle_id = vehicle_map_rs.vehicle_id
+    WHERE translated_site IS NOT NULL
 )
 
 , drive_distances AS (
@@ -83,7 +111,7 @@ WITH driving_periods AS (
         COALESCE(a.driver_first_name, 'unknown'::character varying) AS driver_first_name,
         COALESCE(a.driver_last_name, 'unknown'::character varying) AS driver_last_name,
         (COALESCE(a.driver_first_name, 'unknown'::character varying)::text || ' '::text) || COALESCE(a.driver_last_name, 'unknown'::character varying)::text AS driver_full_name
-        {% for event_type in get_motive_event_type() -%}
+        {% for event_type in get_motive_negative_event_type() -%}
             {%- if event_type|lower == 'speeding' %}
             -- Speeding 0–5 mph
             , SUM(
@@ -152,6 +180,37 @@ WITH driving_periods AS (
         GROUP BY (EXTRACT(year FROM a.start_date)), (EXTRACT(quarter FROM a.start_date)), (to_char(to_date(EXTRACT(month FROM a.start_date)::text, 'MM'::text)::timestamp with time zone, 'Mon'::text)), (EXTRACT(week FROM a.start_date)), (to_char(a.start_date, 'Day'::text)), (a.start_date::date), a.region, a.group_name, a.translated_site, (COALESCE(a.driver_id, '-1'::integer)), (COALESCE(a.driver_first_name, 'unknown'::character varying)), (COALESCE(a.driver_last_name, 'unknown'::character varying)), ((COALESCE(a.driver_first_name, 'unknown'::character varying)::text || ' '::text) || COALESCE(a.driver_last_name, 'unknown'::character varying)::text)
     )
 
+, event_breakdown_w_positive AS (
+        SELECT 
+            EXTRACT(YEAR FROM a.date) AS year,
+            EXTRACT(QUARTER FROM a.date) AS quarter,
+            TO_CHAR(a.date, 'Mon') AS month,
+            EXTRACT(WEEK FROM a.date) AS week,
+            TO_CHAR(a.date, 'Day') AS day,
+            a.date::date AS date,
+            region,
+            group_name,
+            translated_site AS site_name,
+            COALESCE(a.driver_id, -1) AS driver_id,
+            COALESCE(a.driver_first_name, 'unknown') AS driver_first_name,
+            COALESCE(a.driver_last_name, 'unknown') AS driver_last_name,
+            CONCAT(COALESCE(a.driver_first_name, 'unknown'), ' ', COALESCE(a.driver_last_name, 'unknown')) AS driver_full_name
+            {% for event_type in get_motive_positive_event_type() -%}
+                , SUM(
+                CASE
+                    WHEN type = '{{ event_type }}'
+                    THEN 1
+                    ELSE 0
+                END
+                ) AS {{ event_type }}
+            {%- endfor %}
+            , COUNT(DISTINCT a.event_id) AS total_events_positive
+        FROM combined_positive_events_group_mappings a
+        WHERE 1=1 
+        AND a.coaching_status::text <> 'uncoachable'::text AND a.start_date >= '2023-01-01 06:00:00+00'::timestamp with time zone AND a.start_date <= CURRENT_DATE
+        GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13
+) 
+
 , combined_dd_and_eb AS (
     SELECT 
         dd.year,
@@ -168,31 +227,24 @@ WITH driving_periods AS (
         dd.driver_last_name,
         dd.driver_full_name,
         dd.trips,
-        dd.miles_driven,
-        COALESCE(eb.speeding, 0::bigint) AS speeding,
-        COALESCE(eb.speeding_five, 0::bigint) AS speeding_five,
-        COALESCE(eb.speeding_six_to_ten, 0::bigint) AS speeding_six_to_ten,
-        COALESCE(eb.speeding_ten_to_fifteen, 0::bigint) AS speeding_ten_to_fifteen,
-        COALESCE(eb.speeding_fifteen_plus, 0::bigint) AS speeding_fifteen_plus,
-        COALESCE(eb.camera_obstruction, 0::bigint) AS camera_obstruction,
-        COALESCE(eb.cell_phone, 0::bigint) AS cell_phone,
-        COALESCE(eb.crash, 0::bigint) AS crash,
-        COALESCE(eb.distraction, 0::bigint) AS distraction,
-        COALESCE(eb.driver_facing_cam_obstruction, 0::bigint) AS driver_facing_cam_obstruction,
-        COALESCE(eb.drowsiness, 0::bigint) AS drowsiness,
-        COALESCE(eb.forward_collision_warning, 0::bigint) AS forward_collision_warning,
-        COALESCE(eb.manual_event, 0::bigint) AS manual_event,
-        COALESCE(eb.near_miss, 0::bigint) AS near_miss,
-        COALESCE(eb.ran_a_red_light, 0::bigint) AS ran_a_red_light,
-        COALESCE(eb.road_facing_cam_obstruction, 0::bigint) AS road_facing_cam_obstruction,
-        COALESCE(eb.seat_belt_violation, 0::bigint) AS seat_belt_violation,
-        COALESCE(eb.stop_sign_violation, 0::bigint) AS stop_sign_violation,
-        COALESCE(eb.tailgating, 0::bigint) AS tailgating,
-        COALESCE(eb.unsafe_lane_change, 0::bigint) AS unsafe_lane_change,
-        COALESCE(eb.total_events, 0::bigint) AS total_events
+        dd.miles_driven
+        {%- for event_type in get_motive_event_type() -%}
+        {%- if event_type|lower == 'speeding' %}
+            , COALESCE(speeding                        , 0) as speeding
+            , COALESCE(speeding_five                   , 0) as speeding_five
+            , COALESCE(speeding_six_to_ten             , 0) as speeding_six_to_ten
+            , COALESCE(speeding_ten_to_fifteen         , 0) as speeding_ten_to_fifteen
+            , COALESCE(speeding_fifteen_plus           , 0) as speeding_fifteen_plus
+        {%- else %}
+            , COALESCE({{ event_type }}, 0) AS {{ event_type }}
+        {%- endif -%}
+        {% endfor %}
+        , COALESCE(eb.total_events, 0) + COALESCE(ebp.total_events_positive, 0) AS total_events
         FROM drive_distances dd
         LEFT JOIN event_breakdown eb 
-        ON eb.year = dd.year AND eb.month = dd.month AND eb.quarter = dd.quarter AND eb.week = dd.week AND eb.date = dd.date AND eb.group_name::text = dd.group_name::text AND eb.site_name::text = dd.site_name::text AND eb.driver_id = dd.driver_id
+        ON eb.date = dd.date AND eb.group_name::text = dd.group_name::text AND eb.site_name::text = dd.site_name::text AND eb.driver_id = dd.driver_id
+        LEFT JOIN event_breakdown_w_positive ebp
+        ON ebp.date = dd.date AND ebp.group_name::text = dd.group_name::text AND ebp.site_name::text = dd.site_name::text AND ebp.driver_id = dd.driver_id
 )
 
 , safety_score_breakdown AS (
@@ -231,6 +283,8 @@ WITH driving_periods AS (
     cddeb.stop_sign_violation,
     cddeb.tailgating,
     cddeb.unsafe_lane_change,
+    cddeb.safe_distancing,
+    cddeb.alert_driving,
     cddeb.total_events,
     ssw.points_speeding,
     ssw.points_speeding_five,
@@ -252,6 +306,8 @@ WITH driving_periods AS (
     ssw.points_stop_sign_violation,
     ssw.points_tailgating,
     ssw.points_unsafe_lane_change,
+    ssw.points_safe_distancing, 
+    ssw.points_alert_driving,
     cddeb.speeding * ssw.points_speeding AS total_speeding,
     cddeb.speeding_five * ssw.points_speeding_five AS total_speeding_five,
     cddeb.speeding_six_to_ten * ssw.points_speeding_six_to_ten AS total_speeding_six_to_ten,
@@ -272,8 +328,52 @@ WITH driving_periods AS (
     cddeb.stop_sign_violation * ssw.points_stop_sign_violation AS total_stop_sign_violation,
     cddeb.tailgating * ssw.points_tailgating AS total_tailgating,
     cddeb.unsafe_lane_change * ssw.points_unsafe_lane_change AS total_unsafe_lane_change,
-    cddeb.speeding * ssw.points_speeding + cddeb.speeding_five * ssw.points_speeding_five + cddeb.speeding_six_to_ten * ssw.points_speeding_six_to_ten + cddeb.speeding_ten_to_fifteen * ssw.points_speeding_ten_to_fifteen + cddeb.speeding_fifteen_plus * ssw.points_speeding_fifteen_plus + cddeb.camera_obstruction * ssw.points_camera_obstruction + cddeb.cell_phone * ssw.points_cell_phone + cddeb.crash * ssw.points_crash + cddeb.distraction * ssw.points_distraction + cddeb.driver_facing_cam_obstruction * ssw.points_driver_facing_cam_obstruction + cddeb.drowsiness * ssw.points_drowsiness + cddeb.forward_collision_warning * ssw.points_forward_collision_warning + cddeb.manual_event * ssw.points_manual_event + cddeb.near_miss * ssw.points_near_miss + cddeb.ran_a_red_light * ssw.points_ran_a_red_light + cddeb.road_facing_cam_obstruction * ssw.points_road_facing_cam_obstruction + cddeb.seat_belt_violation * ssw.points_seat_belt_violation + cddeb.stop_sign_violation * ssw.points_stop_sign_violation + cddeb.tailgating * ssw.points_tailgating + cddeb.unsafe_lane_change * ssw.points_unsafe_lane_change AS total_points_for_score,
-    cddeb.speeding * 1 + cddeb.speeding_five * 1 + cddeb.speeding_six_to_ten * 1 + cddeb.speeding_ten_to_fifteen * 1 + cddeb.speeding_fifteen_plus * 1 + cddeb.camera_obstruction * 1 + cddeb.cell_phone * 1 + cddeb.crash * 1 + cddeb.distraction * 1 + cddeb.driver_facing_cam_obstruction * 1 + cddeb.drowsiness * 1 + cddeb.forward_collision_warning * 1 + cddeb.manual_event * 1 + cddeb.near_miss * 1 + cddeb.ran_a_red_light * 1 + cddeb.road_facing_cam_obstruction * 1 + cddeb.seat_belt_violation * 1 + cddeb.stop_sign_violation * 1 + cddeb.tailgating * 1 + cddeb.unsafe_lane_change * 1 AS total_points_for_unweighted_score
+    cddeb.safe_distancing * ssw.points_safe_distancing AS total_safe_distancing,
+    cddeb.alert_driving * ssw.points_alert_driving AS total_alert_driving
+    ,   (speeding                       * points_speeding                       ) +
+                (speeding_five                  * points_speeding_five                  ) +
+                (speeding_six_to_ten            * points_speeding_six_to_ten            ) +
+                (speeding_ten_to_fifteen        * points_speeding_ten_to_fifteen        ) +
+                (speeding_fifteen_plus          * points_speeding_fifteen_plus          ) +
+                (camera_obstruction             * points_camera_obstruction             ) +
+                (cell_phone                     * points_cell_phone                     ) +
+                (crash                          * points_crash                          ) +
+                (distraction                    * points_distraction                    ) +
+                (driver_facing_cam_obstruction  * points_driver_facing_cam_obstruction  ) +
+                (drowsiness                     * points_drowsiness                     ) +
+                (forward_collision_warning      * points_forward_collision_warning      ) +
+                (manual_event                   * points_manual_event                   ) +
+                (near_miss                      * points_near_miss                      ) +
+                (ran_a_red_light                * points_ran_a_red_light                ) +
+                (road_facing_cam_obstruction    * points_road_facing_cam_obstruction    ) +
+                (seat_belt_violation            * points_seat_belt_violation            ) +
+                (stop_sign_violation            * points_stop_sign_violation            ) +
+                (tailgating                     * points_tailgating                     ) +
+                (unsafe_lane_change             * points_unsafe_lane_change             ) +    
+                (alert_driving                  * points_alert_driving                  ) +
+                (safe_distancing                * points_safe_distancing                ) as total_points_for_score
+            ,   (speeding                       * 1                                     ) +
+                (speeding_five                  * 1                                     ) +
+                (speeding_six_to_ten            * 1                                     ) +
+                (speeding_ten_to_fifteen        * 1                                     ) +
+                (speeding_fifteen_plus          * 1                                     ) +
+                (camera_obstruction             * 1                                     ) +
+                (cell_phone                     * 1                                     ) +
+                (crash                          * 1                                     ) +
+                (distraction                    * 1                                     ) +
+                (driver_facing_cam_obstruction  * 1                                     ) +
+                (drowsiness                     * 1                                     ) +
+                (forward_collision_warning      * 1                                     ) +
+                (manual_event                   * 1                                     ) +
+                (near_miss                      * 1                                     ) +
+                (ran_a_red_light                * 1                                     ) +
+                (road_facing_cam_obstruction    * 1                                     ) +
+                (seat_belt_violation            * 1                                     ) +
+                (stop_sign_violation            * 1                                     ) +
+                (tailgating                     * 1                                     ) +
+                (unsafe_lane_change             * 1                                     ) +
+                (alert_driving                  * 1                                     ) +
+                (safe_distancing                * 1                                     )     as total_points_for_unweighted_score
     FROM combined_dd_and_eb cddeb
     JOIN safety_score_weights ssw 
         ON cddeb.year = ssw.year::numeric AND cddeb.month = ssw.month::text
@@ -315,6 +415,8 @@ WITH driving_periods AS (
     stop_sign_violation,
     tailgating,
     unsafe_lane_change,
+    safe_distancing,
+    alert_driving,
     total_events,
     points_speeding,
     points_speeding_five,
@@ -336,6 +438,8 @@ WITH driving_periods AS (
     points_stop_sign_violation,
     points_tailgating,
     points_unsafe_lane_change,
+    points_safe_distancing,
+    points_alert_driving,
     total_speeding,
     total_speeding_five,
     total_speeding_six_to_ten,
@@ -356,6 +460,8 @@ WITH driving_periods AS (
     total_stop_sign_violation,
     total_tailgating,
     total_unsafe_lane_change,
+    total_safe_distancing,
+    total_alert_driving,
     total_points_for_score,
     total_points_for_unweighted_score,
     CASE

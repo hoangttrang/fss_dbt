@@ -1,10 +1,6 @@
 {% set month_str = get_current_month_str() %}
 
-WITH event_breakdown AS (
-    SELECT * FROM {{ ref('int_motive_event_breakdown') }}
-)
-
-, rank_trips AS (
+WITH rank_trips AS (
     SELECT * FROM {{ ref('int_motive_rank_trips') }}
 )
 , all_monthly_events AS (

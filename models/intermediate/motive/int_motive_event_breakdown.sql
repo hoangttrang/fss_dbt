@@ -11,7 +11,7 @@ SELECT
 	vehicle_map_rs.region
     , vehicle_map_rs.translated_site
 {%- for month in var('months_list') %}
-  {% for event_type in get_motive_event_type() -%}
+  {% for event_type in get_motive_negative_event_type() -%}
 
     {%- if event_type|lower == 'speeding' %}
       -- Speeding 0–5 mph
