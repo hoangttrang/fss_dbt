@@ -30,6 +30,10 @@ WITH dependent_deduction AS (
     SELECT * FROM {{ ref('stg_ukg_location') }}
 )
 
+, entra_users AS (
+    SELECT * FROM {{ref('stg_entra_users')}}
+)
+
 , site_mapping AS (
     SELECT * FROM {{ ref('stg_motive_consolidated_sites') }}
     WHERE NOT (
@@ -88,6 +92,8 @@ WITH dependent_deduction AS (
         e.preferred_name, 
         e.email_address,
         ec.alternate_email_address,
+        lower(entra.user_principal_name) AS user_principal_name, 
+        entra.entra_user_id,
         em.id AS employment_id,
         em.date_of_seniority,
         em.last_hire_date, -- last hire date is when the employee got rehired
@@ -125,6 +131,8 @@ WITH dependent_deduction AS (
         ON d.employee_id = e.id
     LEFT JOIN employment em
         ON em.employee_id = e.id
+    LEFT JOIN entra_users entra
+        ON entra.employee_id = em.id
     LEFT JOIN job j 
         ON em.primary_job_id = j.id
     LEFT JOIN gl_translation 
