@@ -33,3 +33,35 @@ models:
             combination_of_columns:
               - recordno
   - name: stg_sage_gl_budget_item
+
+  - name: stg_sage_gl_batch
+    description: "General ledger batch (batch grain). Parent of gl_detail lines via recordno = gl_detail.batchkey. Records Intacct deletes as a soft delete (_fivetran_deleted = true) that does NOT propagate down to gl_detail."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - recordno
+
+  - name: stg_sage_gl_entry
+    description: >
+      General ledger ENTRY (line grain). Parent of gl_batch via batchno = gl_batch.recordno.
+      Hard-delete Fivetran connector like gl_detail: Intacct deletes/voids do NOT propagate
+      to this line table, they land only on gl_batch (_fivetran_deleted = true). `state` equals
+      gl_batch.state on 100% of rows, so it CANNOT be used to detect deletes -- a 'Posted' entry
+      can still belong to a deleted batch. Any spend/expense consumer must LEFT JOIN gl_batch
+      for deletion status only and keep entries whose batch is missing, e.g.:
+      LEFT JOIN {% raw %}{{ ref('stg_sage_gl_batch') }}{% endraw %} b ON b.recordno = e.batchno
+      WHERE COALESCE(b._fivetran_deleted, FALSE) = FALSE.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - recordno
+
+  - name: stg_sage_ap_bill_batch
+    description: "AP bill entry batch (batch grain). Parent of ap_bill via recordno = ap_bill.prbatchkey. A voided bill is zeroed here (total = 0) even when the bill header keeps its full total and delete flag unset. Note - this table is under-synced relative to ap_bill, so consumers should drop bills only on positive evidence (a present, live, zeroed batch) and keep bills whose batch is missing."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - recordno

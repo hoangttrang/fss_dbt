@@ -5,7 +5,7 @@ WITH entra_users AS (
 
 SELECT 
     CAST(entra_user_id AS character varying) AS entra_user_id,
-    CAST(employee_id AS character varying) AS employee_id,
+    LPAD(CAST(employee_id AS character varying), 6, '0') AS employee_id,
     CAST(display_name AS character varying) AS display_name,
     CAST(first_name AS character varying) AS first_name,
     CAST(last_name AS character varying) AS last_name,

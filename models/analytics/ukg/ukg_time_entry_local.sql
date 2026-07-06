@@ -17,6 +17,7 @@ WITH employee AS(
         full_employee_list.first_name,
         full_employee_list.last_name,
         site_id AS organization_level_4_id, 
+        full_employee_list.user_principal_name, 
         full_employee_list.employment_id,
         full_employee_list.employee_id, 
         full_employee_list.site_description,
@@ -87,9 +88,10 @@ WITH employee AS(
 
 , final_tab AS (
     SELECT 
-        account_id, 
+        account_id AS time_entries_account_id, 
         employee_full_timezone.employee_id,
         CAST(employee_full_timezone.employment_id AS INT) AS employment_id,
+        employee_full_timezone.user_principal_name, 
         employee_full_timezone.first_name,
         employee_full_timezone.last_name,
         CONCAT(employee_full_timezone.first_name, ' ', employee_full_timezone.last_name) AS employee_full_name,
@@ -121,6 +123,7 @@ WITH employee AS(
         ON employee_full_timezone.employment_id = employee_max_weekly_pay.employment_id
         AND time_entries_transform.year_week = employee_max_weekly_pay.pay_for_year_week
     WHERE employee_full_timezone.organization_level_4_id IS NOT NULL AND adjusted_total > 0
+
     ) 
 
 SELECT DISTINCT *
